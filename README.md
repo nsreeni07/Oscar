@@ -1,3 +1,2 @@
 # Oscar
-A Raspberry Pi 5 mini PC that runs 24/7 on window solar power, hosts an offline JARVIS-style AI, recognises hand gestures through a camera, and runs OpenClaw autonomous agents in the background.
-
+Autonomous UAV system that performs precision crop monitoring using aerial imaging and vegetation index mapping. The drone executes pre-programmed waypoint missions, captures geotagged imagery, and processes data on a ground station to generate field health maps.
