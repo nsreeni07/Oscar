@@ -1,0 +1,243 @@
+#!/usr/bin/env python3
+"""
+ndvi_processor.py — Ground station NDVI vegetation health map generator.
+
+Run on your laptop AFTER the flight, once you've pulled images from the Pi.
+
+Usage:
+    python3 ndvi_processor.py --input ./survey_images --output ./ndvi_output
+
+Pipeline:
+    1. Load each geotagged JPEG
+    2. Apply NDVI formula using NoIR + 680nm filter channel mapping
+    3. Generate per-image NDVI maps (colorized)
+    4. Stitch into a composite field map (if enough overlap)
+    5. Export summary statistics CSV
+
+Channel mapping with 680nm bandpass filter on NoIR camera:
+    Blue channel  ≈ Near-Infrared (NIR)  — filter passes NIR into B channel
+    Red channel   ≈ Red (VIS)
+    NDVI = (NIR - RED) / (NIR + RED + epsilon)
+"""
+
+import argparse
+import csv
+import logging
+import time
+from pathlib import Path
+
+import cv2
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # Non-interactive backend — works headless
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
+log = logging.getLogger("NDVI")
+
+
+# ── NDVI colormap (red=dead, yellow=stressed, green=healthy) ─────────────────
+NDVI_CMAP = mcolors.LinearSegmentedColormap.from_list(
+    "ndvi",
+    [
+        (0.0,  "#8B0000"),   # -1.0  bare soil / water (dark red)
+        (0.25, "#FF4500"),   # -0.5  very sparse vegetation (orange-red)
+        (0.45, "#FFD700"),   #  0.0  stressed / sparse (yellow)
+        (0.6,  "#ADFF2F"),   #  0.3  moderate vegetation (yellow-green)
+        (0.75, "#32CD32"),   #  0.5  healthy vegetation (green)
+        (1.0,  "#006400"),   #  1.0  dense canopy (dark green)
+    ],
+    N=256,
+)
+
+
+def compute_ndvi(image_bgr: np.ndarray) -> np.ndarray:
+    """
+    Compute NDVI from a BGR image captured with NoIR + 680nm filter.
+    Returns float32 array in range [-1, 1].
+    """
+    image = image_bgr.astype(np.float32)
+    nir = image[:, :, 0]  # Blue channel → NIR proxy
+    red = image[:, :, 2]  # Red channel  → Red
+
+    epsilon = 1e-6  # Prevent divide-by-zero
+    ndvi = (nir - red) / (nir + red + epsilon)
+    return np.clip(ndvi, -1.0, 1.0)
+
+
+def ndvi_to_colormap(ndvi: np.ndarray) -> np.ndarray:
+    """Convert [-1,1] NDVI array to uint8 BGR image using our custom colormap."""
+    # Normalize to [0,1] for colormap
+    normalized = (ndvi + 1.0) / 2.0
+    colored = NDVI_CMAP(normalized)             # RGBA float
+    colored_uint8 = (colored[:, :, :3] * 255).astype(np.uint8)
+    return cv2.cvtColor(colored_uint8, cv2.COLOR_RGB2BGR)
+
+
+def process_image(image_path: Path, output_dir: Path) -> dict:
+    """
+    Process a single image. Returns stats dict.
+    Saves:
+        <name>_ndvi.jpg          — colorized NDVI map
+        <name>_ndvi_overlay.jpg  — side-by-side original + NDVI
+    """
+    img = cv2.imread(str(image_path))
+    if img is None:
+        log.warning(f"Could not read: {image_path.name}")
+        return {}
+
+    ndvi = compute_ndvi(img)
+    ndvi_colored = ndvi_to_colormap(ndvi)
+
+    # ── Save colorized NDVI ────────────────────────────────────────────────
+    out_ndvi = output_dir / (image_path.stem + "_ndvi.jpg")
+    cv2.imwrite(str(out_ndvi), ndvi_colored, [cv2.IMWRITE_JPEG_QUALITY, 92])
+
+    # ── Save side-by-side overlay ──────────────────────────────────────────
+    h, w = img.shape[:2]
+    # Resize for composite (keep aspect, max width 800px per panel)
+    scale = min(800 / w, 600 / h)
+    thumb_size = (int(w * scale), int(h * scale))
+    orig_thumb  = cv2.resize(img, thumb_size)
+    ndvi_thumb  = cv2.resize(ndvi_colored, thumb_size)
+
+    # Add labels
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(orig_thumb, "Original (NoIR)", (10, 28), font, 0.7, (255,255,255), 2)
+    cv2.putText(ndvi_thumb, "NDVI Map",        (10, 28), font, 0.7, (255,255,255), 2)
+
+    composite = np.hstack([orig_thumb, ndvi_thumb])
+    out_overlay = output_dir / (image_path.stem + "_overlay.jpg")
+    cv2.imwrite(str(out_overlay), composite, [cv2.IMWRITE_JPEG_QUALITY, 85])
+
+    # ── Statistics ────────────────────────────────────────────────────────
+    flat = ndvi.flatten()
+    vegetation_mask = ndvi > 0.2   # Pixels likely to be vegetation
+
+    stats = {
+        "filename":       image_path.name,
+        "mean_ndvi":      float(np.mean(flat)),
+        "median_ndvi":    float(np.median(flat)),
+        "std_ndvi":       float(np.std(flat)),
+        "min_ndvi":       float(np.min(flat)),
+        "max_ndvi":       float(np.max(flat)),
+        "veg_fraction":   float(np.mean(vegetation_mask)),  # % of frame with vegetation
+        "healthy_fraction": float(np.mean(ndvi > 0.4)),     # % healthy vegetation
+        "stressed_fraction": float(np.mean((ndvi > 0.1) & (ndvi <= 0.3))),
+    }
+
+    log.info(
+        f"  {image_path.name}: NDVI mean={stats['mean_ndvi']:.3f}  "
+        f"veg={stats['veg_fraction']*100:.1f}%  "
+        f"healthy={stats['healthy_fraction']*100:.1f}%"
+    )
+    return stats
+
+
+def generate_summary_plot(all_stats: list, output_dir: Path):
+    """Generate a summary bar chart and histogram of NDVI across all images."""
+    if not all_stats:
+        return
+
+    names   = [s["filename"][:12] + "…" for s in all_stats]
+    means   = [s["mean_ndvi"] for s in all_stats]
+    healthy = [s["healthy_fraction"] * 100 for s in all_stats]
+    stressed= [s["stressed_fraction"] * 100 for s in all_stats]
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    fig.suptitle("NDVI Survey Summary", fontsize=14, fontweight="bold")
+
+    # Mean NDVI per image
+    ax = axes[0]
+    colors = ["#32CD32" if m > 0.3 else "#FFD700" if m > 0.1 else "#FF4500" for m in means]
+    ax.bar(range(len(names)), means, color=colors)
+    ax.axhline(0.2, color="gray", linestyle="--", linewidth=0.8, label="Vegetation threshold")
+    ax.set_xticks(range(len(names)))
+    ax.set_xticklabels(names, rotation=45, ha="right", fontsize=8)
+    ax.set_ylabel("Mean NDVI")
+    ax.set_title("Mean NDVI per image")
+    ax.set_ylim(-0.2, 0.8)
+    ax.legend(fontsize=8)
+
+    # Stacked health breakdown
+    ax2 = axes[1]
+    x = range(len(names))
+    ax2.bar(x, healthy,  color="#32CD32", label="Healthy (>0.4)")
+    ax2.bar(x, stressed, bottom=healthy, color="#FFD700", label="Stressed (0.1–0.3)")
+    ax2.set_xticks(x)
+    ax2.set_xticklabels(names, rotation=45, ha="right", fontsize=8)
+    ax2.set_ylabel("% of frame")
+    ax2.set_title("Vegetation health breakdown")
+    ax2.legend(fontsize=8)
+
+    plt.tight_layout()
+    out = output_dir / "ndvi_summary.png"
+    plt.savefig(str(out), dpi=150, bbox_inches="tight")
+    plt.close()
+    log.info(f"Summary plot saved: {out}")
+
+
+def generate_stats_csv(all_stats: list, output_dir: Path):
+    """Write per-image stats to CSV for further analysis."""
+    if not all_stats:
+        return
+    out = output_dir / "ndvi_stats.csv"
+    keys = all_stats[0].keys()
+    with open(out, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=keys)
+        writer.writeheader()
+        writer.writerows(all_stats)
+    log.info(f"Stats CSV saved: {out}")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="NDVI processor for NoIR aerial imagery")
+    parser.add_argument("--input",  "-i", required=True, help="Directory of input JPEG images")
+    parser.add_argument("--output", "-o", default="./ndvi_output", help="Output directory")
+    parser.add_argument("--pattern", default="*.jpg", help="File glob pattern (default: *.jpg)")
+    args = parser.parse_args()
+
+    input_dir  = Path(args.input)
+    output_dir = Path(args.output)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    images = sorted(input_dir.glob(args.pattern))
+    if not images:
+        log.error(f"No images found in {input_dir} matching '{args.pattern}'")
+        return
+
+    log.info(f"Processing {len(images)} images from {input_dir}")
+    log.info(f"Output → {output_dir}")
+
+    t0 = time.time()
+    all_stats = []
+
+    for i, img_path in enumerate(images, 1):
+        log.info(f"[{i}/{len(images)}] {img_path.name}")
+        stats = process_image(img_path, output_dir)
+        if stats:
+            all_stats.append(stats)
+
+    # Summary outputs
+    generate_summary_plot(all_stats, output_dir)
+    generate_stats_csv(all_stats, output_dir)
+
+    elapsed = time.time() - t0
+    if all_stats:
+        overall_mean = np.mean([s["mean_ndvi"] for s in all_stats])
+        overall_veg  = np.mean([s["veg_fraction"] for s in all_stats]) * 100
+        log.info("─" * 60)
+        log.info(f"DONE in {elapsed:.1f}s — {len(all_stats)} images processed")
+        log.info(f"Field average NDVI:   {overall_mean:.3f}")
+        log.info(f"Average veg cover:    {overall_veg:.1f}%")
+        log.info(f"Output directory:     {output_dir}")
+        log.info("─" * 60)
+
+
+if __name__ == "__main__":
+    main()
+
