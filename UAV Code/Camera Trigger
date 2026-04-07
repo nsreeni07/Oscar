@@ -1,0 +1,101 @@
+"""
+camera_trigger.py — Picamera2 controller for the NoIR camera.
+
+Captures images on command from the MAVLink trigger loop.
+Saves JPEG files with timestamped filenames.
+"""
+
+import asyncio
+import logging
+import time
+from pathlib import Path
+from typing import Optional
+
+log = logging.getLogger("UAV.camera")
+
+
+class CameraTrigger:
+    def __init__(self, cfg):
+        self.cfg       = cfg
+        self._camera   = None
+        self._capture_count = 0
+        self._initialized   = False
+
+    async def initialize(self):
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self._init_camera)
+        self._initialized = True
+        log.info("Camera ready")
+
+    def _init_camera(self):
+        from picamera2 import Picamera2
+        self._camera = Picamera2()
+        config = self._camera.create_still_configuration(
+            main={"size": self.cfg.CAMERA_RESOLUTION, "format": "RGB888"},
+            lores={"size": (640, 480)},
+            display="lores",
+        )
+        self._camera.configure(config)
+
+        # NoIR camera settings — optimize for outdoor aerial NDVI
+        self._camera.set_controls({
+            "AwbEnable":        False,       # Disable auto white balance (ruins NDVI)
+            "AwbMode":          0,           # Manual
+            "ColourGains":      (1.0, 1.0),  # Neutral gains for NoIR
+            "AeEnable":         True,        # Auto exposure ON
+            "ExposureTime":     0,           # Let AE decide
+            "AnalogueGain":     1.0,
+            "Sharpness":        1.5,
+            "Brightness":       0.0,
+            "Contrast":         1.0,
+            "Saturation":       1.0,
+            "NoiseReductionMode": 2,         # Fast noise reduction
+        })
+
+        self._camera.start()
+        time.sleep(2)  # Warm up
+        log.info(f"Picamera2 started: {self.cfg.CAMERA_RESOLUTION}")
+
+    async def capture(self, gps) -> Optional[Path]:
+        """
+        Capture a single image. Returns Path to saved file, or None on error.
+        """
+        if not self._initialized or self._camera is None:
+            log.error("Camera not initialized")
+            return None
+
+        self._capture_count += 1
+        ts = time.strftime("%Y%m%d_%H%M%S")
+        fname = f"img_{ts}_{self._capture_count:04d}.jpg"
+        fpath = self.cfg.IMAGE_DIR / fname
+
+        loop = asyncio.get_event_loop()
+        try:
+            await loop.run_in_executor(None, lambda: self._save_image(fpath))
+            log.info(f"Captured: {fname} [{self._capture_count}]")
+            return fpath
+        except Exception as e:
+            log.error(f"Capture failed: {e}")
+            return None
+
+    def _save_image(self, path: Path):
+        """Runs in thread executor — picamera2 is not async-safe."""
+        import io
+        from PIL import Image
+
+        # Capture raw array
+        array = self._camera.capture_array("main")
+
+        # Save as JPEG with quality setting
+        img = Image.fromarray(array)
+        img.save(str(path), format="JPEG", quality=self.cfg.JPEG_QUALITY, optimize=True)
+
+    @property
+    def capture_count(self) -> int:
+        return self._capture_count
+
+    async def cleanup(self):
+        if self._camera:
+            self._camera.stop()
+            self._camera.close()
+        log.info(f"Camera closed. Total captures: {self._capture_count}")
