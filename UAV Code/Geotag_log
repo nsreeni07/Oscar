@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+"""
+geotag_from_log.py — Post-flight geotagging using ArduPilot .bin dataflash log.
+
+USE THIS if onboard geotagging failed, or as a verification pass.
+
+Usage:
+    python3 geotag_from_log.py --images ./survey_images --log ./flight.bin
+
+How it works:
+    1. Parse GPS positions + timestamps from the ArduPilot .bin log
+    2. For each image, find the closest GPS timestamp to image capture time
+    3. Write GPS EXIF to the image using piexif
+
+Requires:
+    pip install pymavlink piexif
+    (pymavlink includes the log parser — mavlogdump)
+"""
+
+import argparse
+import csv
+import logging
+from pathlib import Path
+import time
+
+log = logging.getLogger("UAV.geotag_log")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+
+
+def parse_bin_log(log_path: Path) -> list:
+    """
+    Parse GPS entries from an ArduPilot .bin dataflash log.
+    Returns list of dicts: {time_us, lat, lon, alt, satellites, hdop}
+    """
+    from pymavlink import DFReader
+    gps_entries = []
+
+    log.info(f"Parsing log: {log_path}")
+    mlog = DFReader.DFReader_binary(str(log_path), zero_time_base=True)
+
+    while True:
+        msg = mlog.recv_match(type=["GPS", "GPS2"])
+        if msg is None:
+            break
+        if msg.Status < 3:  # Skip entries without 3D fix
+            continue
+        gps_entries.append({
+            "time_us":    msg._timestamp * 1e6,   # Convert to microseconds
+            "lat":        msg.Lat,
+            "lon":        msg.Lng,
+            "alt_m":      msg.Alt,
+            "satellites": msg.NSats,
+            "hdop":       msg.HDop,
+        })
+
+    log.info(f"Parsed {len(gps_entries)} GPS entries from log")
+    return sorted(gps_entries, key=lambda x: x["time_us"])
+
+
+def get_image_timestamp(image_path: Path) -> float:
+    """
+    Get image capture timestamp.
+    Tries EXIF DateTimeOriginal first, falls back to file mtime.
+    Returns Unix timestamp (float).
+    """
+    try:
+        import piexif
+        exif = piexif.load(str(image_path))
+        exif_time = exif["Exif"].get(piexif.ExifIFD.DateTimeOriginal)
+        if exif_time:
+            ts = time.strptime(exif_time.decode(), "%Y:%m:%d %H:%M:%S")
+            return time.mktime(ts)
+    except Exception:
+        pass
+    return image_path.stat().st_mtime
+
+
+def find_closest_gps(gps_entries: list, image_time_s: float) -> dict:
+    """Find GPS entry with timestamp closest to the image capture time."""
+    image_us = image_time_s * 1e6
+    best = min(gps_entries, key=lambda g: abs(g["time_us"] - image_us))
+    delta_s = abs(best["time_us"] - image_us) / 1e6
+    if delta_s > 5.0:
+        log.warning(f"GPS match is {delta_s:.1f}s away from image timestamp")
+    return best, delta_s
+
+
+def write_exif_gps(image_path: Path, gps: dict):
+    """Write GPS EXIF tags to JPEG."""
+    import piexif
+
+    lat = gps["lat"]
+    lon = gps["lon"]
+    alt = max(gps["alt_m"], 0.0)
+
+    def to_dms(decimal):
+        decimal = abs(decimal)
+        d = int(decimal)
+        m = int((decimal - d) * 60)
+        s = round(((decimal - d) * 60 - m) * 60 * 1000)
+        return ((d, 1), (m, 1), (s, 1000))
+
+    try:
+        exif_dict = piexif.load(str(image_path))
+    except Exception:
+        exif_dict = {"0th": {}, "Exif": {}, "GPS": {}, "1st": {}}
+
+    exif_dict["GPS"] = {
+        piexif.GPSIFD.GPSLatitudeRef:  b"N" if lat >= 0 else b"S",
+        piexif.GPSIFD.GPSLatitude:     to_dms(lat),
+        piexif.GPSIFD.GPSLongitudeRef: b"E" if lon >= 0 else b"W",
+        piexif.GPSIFD.GPSLongitude:    to_dms(lon),
+        piexif.GPSIFD.GPSAltitudeRef:  0,
+        piexif.GPSIFD.GPSAltitude:     (int(alt * 100), 100),
+        piexif.GPSIFD.GPSSatellites:   str(gps["satellites"]).encode(),
+        piexif.GPSIFD.GPSDOP:          (int(gps["hdop"] * 100), 100),
+    }
+
+    piexif.insert(piexif.dump(exif_dict), str(image_path))
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Post-flight geotagging from ArduPilot .bin log")
+    parser.add_argument("--images", "-i", required=True, help="Directory of images")
+    parser.add_argument("--log",    "-l", required=True, help="ArduPilot .bin log file")
+    parser.add_argument("--output", "-o", default=None,  help="Output CSV (default: images dir)")
+    args = parser.parse_args()
+
+    images_dir = Path(args.images)
+    log_path   = Path(args.log)
+    csv_out    = Path(args.output) if args.output else images_dir / "geotag_results.csv"
+
+    if not log_path.exists():
+        log.error(f"Log file not found: {log_path}")
+        return
+
+    gps_entries = parse_bin_log(log_path)
+    if not gps_entries:
+        log.error("No GPS entries found in log — check log file and GPS fix during flight")
+        return
+
+    images = sorted(images_dir.glob("*.jpg"))
+    log.info(f"Geotagging {len(images)} images")
+
+    results = []
+    for img_path in images:
+        img_time = get_image_timestamp(img_path)
+        best_gps, delta_s = find_closest_gps(gps_entries, img_time)
+
+        write_exif_gps(img_path, best_gps)
+
+        results.append({
+            "filename":   img_path.name,
+            "lat":        f"{best_gps['lat']:.8f}",
+            "lon":        f"{best_gps['lon']:.8f}",
+            "alt_m":      f"{best_gps['alt_m']:.2f}",
+            "satellites": best_gps["satellites"],
+            "hdop":       f"{best_gps['hdop']:.2f}",
+            "time_delta_s": f"{delta_s:.2f}",
+        })
+        log.info(f"  {img_path.name} → {best_gps['lat']:.6f},{best_gps['lon']:.6f}  Δt={delta_s:.1f}s")
+
+    # Write results CSV
+    with open(csv_out, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=results[0].keys())
+        writer.writeheader()
+        writer.writerows(results)
+
+    log.info(f"Done. Geotag results: {csv_out}")
+
+
+if __name__ == "__main__":
+    main()
