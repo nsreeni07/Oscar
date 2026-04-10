@@ -19,7 +19,7 @@ def get_distance(lat1, lon1, lat2, lon2):
 
 # Connect to flight controller
 print("Connecting to flight controller...")
-master = mavutil.mavlink_connection('COM3', baud=57600)
+master = mavutil.mavlink_connection('COM3', baud=115200)
 
 # Wait for heartbeat
 master.wait_heartbeat()
@@ -43,7 +43,7 @@ while True:
             print(f"Moved: {dist:.2f} meters")
 
             if dist > capture_distance:
-                print("📸 TAKE PHOTO")
+                print(" TAKE PHOTO")
 
                 # TODO: Replace with real camera trigger
                 # Example:
@@ -52,5 +52,7 @@ while True:
                 last_position = (lat, lon)
         else:
             last_position = (lat, lon)
+
+     last_position = (lat, lon)
 
     time.sleep(0.1)
