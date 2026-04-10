@@ -3,7 +3,7 @@ camera_trigger.py — Picamera2 controller for the NoIR camera.
 
 Captures images on command from the MAVLink trigger loop.
 Saves JPEG files with timestamped filenames.
-"""
+""" 
 
 import asyncio
 import logging
