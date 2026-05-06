@@ -15,8 +15,7 @@ Autonomous UAV system that performs precision crop monitoring using aerial imagi
 | M3 Screw Assortment (motor mounts) | 1 | $9.99 | Frame assembly — motor mount fasteners |
 | M3 Screw Assortment (FC/ESC stack) | 1 | $8.99 | Frame assembly — flight controller and ESC retention |
 | Heat-set inserts M3 × OD4.5 | 1 | $3.03 | Motor mount clamp inserts |
-| Landing gear CF tubes — 14mm OD × 250mm | 4 | ~$10.00 | Legs — same round CF tube stock, smaller OD |
-| Landing gear rubber feet | 4 | ~$4.00 | Landing shock absorption |
+
 
 ---
 
@@ -49,7 +48,6 @@ Autonomous UAV system that performs precision crop monitoring using aerial imagi
 | Matek H743 Slim V3 flight controller | 1 | $74.51 | Main flight computer |
 | Holybro PM06 V2 power module | 1 | $20.99 | Power distribution |
 | M8N GPS module with compass | 1 | $31.24 | Position hold, RTL, waypoint navigation — external compass on mast |
-| GPS mast / standoff 8–10cm | 1 | ~$4.00 | Clears frame arms at 850mm span |
 | SiK 915MHz telemetry pair | 1 | $58.99 | Live MAVLink to laptop — mission monitoring over-air |
 | FlySky FS-i6 TX + FS-iA6B RX bundle | 1 | $49.99 | RC control — 6 channels, iBus, receiver included |
 
