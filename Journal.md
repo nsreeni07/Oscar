@@ -1,3 +1,25 @@
+5/5
+Final Draft
+I finalized everything today and the final cost for everything came close to $650, I'm paying $550 out of pocket while Stasis I'm hoping will get me a $100. I finished the cad Model adding motor mounts and double checking everything.
+<img width="1625" height="795" alt="Screenshot 2026-05-05 223018" src="https://github.com/user-attachments/assets/45a92108-5968-4068-9fa5-442831c34047" />
+
+4/26
+Cad Model and Revamp
+Okay this is the final revamp, I am almost done with the cad model for the drone I just to need the motor mounts and the gimbal I made in another file to this one, I also made a new dossier for the drone included updated thrust calculations made it a bit nicer. I'm going to run simulations on this frame in fusion soon hopefully.<img width="1917" height="982" alt="Screenshot 2026-04-26 162501" src="https://github.com/user-attachments/assets/28d806ec-79f9-47fb-9391-9f5ed72f6bb4" />
+
+
+4/20
+Frame Design and Sponsors
+So I worked on my drone frame today I looked through some frames for sale and took inspiration after drawing my own sketch I went into onshape and designed the bottom plate, I'm going to deisgn the top plate after but progress is a bit slow because I got exams right now. Because my new plan is a 850mm drone the cost is quite high so I'm paying about $100 out of pocket and I'm hoping to get $200 from stasis and $200 from otuside sponsors, I have created a list and I'm going to start emailing, I'm hoping it goes well so fingers crossed. But back to the drone frame, I'm gonna use clamps to secure the motor arms together and tightne with m3 nylon bolts and thats pretty much it for today.
+
+<img width="1124" height="759" alt="Screenshot 2026-04-20 223512" src="https://github.com/user-attachments/assets/139ad086-0a11-44e1-8b2a-872981db6df5" />
+
+
+4/13
+Feedback
+I got some feedback on my project and reailzed I had a lot to change, first my tier is too high, and a lot of my project is just buying parts, I've decided to refresh this entire project 1)I'm creating my own custom frame 2)I'm creating my own custom flight computer(not sure about this one yet) 3)I need to see more ways I can save cost I ran new thrust calculations with the setup I want to do and I created a doc that explains everything new I am going to be doing with this project https://docs.google.com/document/d/19ZpP3lER7y1khA4oXiPfYRFo_DdoW_JR/edit
+
+
 4/11
 MAVLink Communication
 The main work was getting the MAVLink figured out between the rasberry pi and the flight controller. MAVLink is what lets the pi talk to the computer. It's how the Pi will read GPS coordinates, battery voltage, and flight mode in real time during a survey. This is what enable geotagging and distance vases capture. I worked through the full integration in VS code. When I get the Pi I will have configure the hardware UART, on of the UART port need to be configured to output MAVLink at 115200 baud. Then pymavlink handles the message parsing in python. There is a lot more to do with the Pi but that will be when it arrives.
