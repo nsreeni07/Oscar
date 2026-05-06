@@ -1,5 +1,8 @@
 # Oscar
 Autonomous UAV system that performs precision crop monitoring using aerial imaging and vegetation index mapping. The drone executes pre-programmed waypoint missions, captures geotagged imagery, and processes data on a ground station to generate field health maps.
+
+<img width="1625" height="795" alt="Screenshot 2026-05-05 223018" src="https://github.com/user-attachments/assets/3a538533-8a69-4f78-9dde-416353ef1062" />
+
 # Project OSCAR — Bill of Materials
 
 > Custom 850mm endurance agricultural mapping quadcopter
