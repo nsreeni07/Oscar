@@ -1,21 +1,92 @@
 # Oscar
 Autonomous UAV system that performs precision crop monitoring using aerial imaging and vegetation index mapping. The drone executes pre-programmed waypoint missions, captures geotagged imagery, and processes data on a ground station to generate field health maps.
-|Name                                       |Purpose                                                         |Quantity|Total Cost (USD)|Link                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |Distributor    |
-|-------------------------------------------|----------------------------------------------------------------|--------|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
-|Heat Shrink                                |Heart shrink tubing to protect wires                            |1       |2.51            |https://www.aliexpress.us/item/3256808481436790.html?spm=a2g0o.detail.0.0.2ea42pyq2pyq8b&mp=1&pdp_npi=6%40dis%21USD%21USD%202.51%21USD%202.51%21%21USD%202.51%21%21%21%4021033d1217757901753861774e71bf%2112000046161339604%21ct%21US%217516280209%21%211%210%21&_gl=1*kw4hi5*_gcl_aw*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_dc*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_au*MTY0NzU5ODU1Ny4xNzc1NDI3NDU5*_ga*MTU0MjkxNjM2NjEwMDA5Ni4xNzc1NDI3NDUyNjg4*_ga_VED1YSGNC7*czE3NzU3ODU4OTMkbzE0JGcxJHQxNzc1Nzg5OTg5JGoyNCRsMCRoMA..&gatewayAdapt=glo2usa |Aliexpress     |
-|F405 V4 55A Stack                          |Main flight computer                                            |1       |70.37           |https://www.aliexpress.us/item/3256810175244539.html?spm=a2g0o.cart.0.0.49f438daPHkToB&mp=1&pdp_npi=6%40dis%21USD%21USD%2089.08%21USD%2070.37%21%21USD%2070.37%21%21%21%402101ee6617757894851105344eb182%2112000052131307438%21ct%21US%217516280209%21%211%210%21&_gl=1*eq945d*_gcl_aw*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_dc*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_au*MTY0NzU5ODU1Ny4xNzc1NDI3NDU5*_ga*MTU0MjkxNjM2NjEwMDA5Ni4xNzc1NDI3NDUyNjg4*_ga_VED1YSGNC7*czE3NzU3ODU4OTMkbzE0JGcxJHQxNzc1Nzg5NTQ5JGo4JGwwJGgw&gatewayAdapt=glo2usa    |Aliexpress     |
-|3.5mm Female Bullet Sockets                |To connect the motors to the Main Flight Computer               |1       |2.82            |https://www.aliexpress.us/item/2255800253540959.html?spm=a2g0o.detail.0.0.3232Xfs5Xfs50L&mp=1&pdp_npi=6%40dis%21USD%21USD%202.82%21USD%202.82%21%21USD%202.82%21%21%21%402101ee6617757894976185743eb182%2110000001809437723%21ct%21US%217516280209%21%211%210%21&_gl=1*1xlhnra*_gcl_aw*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_dc*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_au*MTY0NzU5ODU1Ny4xNzc1NDI3NDU5*_ga*MTU0MjkxNjM2NjEwMDA5Ni4xNzc1NDI3NDUyNjg4*_ga_VED1YSGNC7*czE3NzU3ODU4OTMkbzE0JGcxJHQxNzc1Nzg5NDk3JGo2MCRsMCRoMA..&gatewayAdapt=glo2usa|Aliexpress     |
-|1045 props                                 |Propellor that provide lift                                     |1       |6.13            |https://www.aliexpress.us/item/2255800097472721.html?spm=a2g0o.detail.0.0.5bdeZpi6Zpi6N9&mp=1&pdp_npi=6%40dis%21USD%21USD%208.76%21USD%206.13%21%21USD%206.13%21%21%21%402101ee6617757892771738996eb182%2110000001166422342%21ct%21US%217516280209%21%211%210%21&_gl=1*1u1g84t*_gcl_aw*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_dc*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_au*MTY0NzU5ODU1Ny4xNzc1NDI3NDU5*_ga*MTU0MjkxNjM2NjEwMDA5Ni4xNzc1NDI3NDUyNjg4*_ga_VED1YSGNC7*czE3NzU3ODU4OTMkbzE0JGcxJHQxNzc1Nzg5Mjc3JGozOCRsMCRoMA..&gatewayAdapt=glo2usa|Aliexpress     |
-|2212 920KV motors                          |Motors that provide lift                                        |1       |26.05           |https://www.aliexpress.us/item/2255800097472721.html?spm=a2g0o.cart.0.0.203238da9h5LLO&mp=1&pdp_npi=6%40dis%21USD%21USD%2037.22%21USD%2026.05%21%21USD%2026.05%21%21%21%402101ee6617757890062362337eb182%2110000001166422340%21ct%21US%217516280209%21%211%210%21&_gl=1*1yjcceq*_gcl_aw*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_dc*R0NMLjE3NzU1MTE4NDkuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4VnlHV196T3ktRjFRR1Bmd2lGaENqZlZNaFB1c2l0TTJXd0xHLU9jX2tEZVYwR1N5N0Vlb2FBdGxqRUFMd193Y0I.*_gcl_au*MTY0NzU5ODU1Ny4xNzc1NDI3NDU5*_ga*MTU0MjkxNjM2NjEwMDA5Ni4xNzc1NDI3NDUyNjg4*_ga_VED1YSGNC7*czE3NzU3ODU4OTMkbzE0JGcxJHQxNzc1Nzg5MDM4JGozJGwwJGgw&gatewayAdapt=glo2usa   |Aliexpress     |
-|Printing Legion                            |For some 3d printed parts, will pay for shipping                |1       |10.00           |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |Printing Legion|
-|XT60 Connectors                            |Used for battery connection to PDB                              |1       |5.49            |https://www.aliexpress.us/item/3256808969625713.html?spm=a2g0o.productlist.main.4.4a2f4d2eZLl4Of&aem_p4p_detail=202604061704439998386293275080002716498&algo_pvid=851d4e4b-f880-4834-b0f0-72e7facad96f&algo_exp_id=851d4e4b-f880-4834-b0f0-72e7facad96f-3&pdp_ext_f=%7B%22order%22%3A%22743%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%211.25%211.14%21%21%218.54%217.77%21%402101f54117755202837875749e3840%2112000048123876357%21sea%21US%217516280209%21ABX%211%210%21n_tag%3A-29910%3Bd%3A54324566%3Bm03_new_user%3A-29895&curPageLogUid=kN3rxpHiXkRx&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005009155940465%7C_p_origin_prod%3A&search_p4p_id=202604061704439998386293275080002716498_1                      |Aliexpress     |
-|M8N GPS module with Compass                |GPS module that tells exact location needed for waypoint marking|1       |31.24           |https://www.amazon.com/Compass-Precision-Receiver-Navigation-Compatible/dp/B08NY9JSZ3/ref=sr_1_5_sspa?dib=eyJ2IjoiMSJ9.ZF865qI3yNN7-djA6h9lTjanWixtQDVkgZ6KHhOfgza9xh2swWaN3eevZk8469ThHfsRvw-pJIv0Yi2ulaIU7aXgqYX27teuncTHVzIIscOOvtyARQBl8ryukmnNO1gv8uN_lxD4C5Y5lkHuAl-pn-bwJLtpRcdMGRSSZ6D3tK2Y15FvG-b398ibgxhXafV00q2hdjCU4P68qNdd7bfrUhN_Y9UKkkuwcy9D8Fs5tPY.xnX_Wb47K3gTwMsmacgZmQX41MArXg3ixEmm030Y07c&dib_tag=se&keywords=M8N+gps+module+with+compass&qid=1775512811&sr=8-5-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9tdGY&psc=1                                                                                                                                                                                                                                                |Amazon         |
-|Raspberry Pi NoIR Camera - 8 Megapixel (V2)|Main Ifared Camera that takes aerial photography                |        |15.00           |https://www.digikey.com/en/products/detail/raspberry-pi/SC0024/6152811                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |Digikey        |
-| Raspberry Pi - 32 GB Memory Card          |Needed to run the Pi and stores all imaging data                |1       |24.95           |https://www.canakit.com/raspberry-pi-sd-card-noobs.html?defpid=4101                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |Canakit        |
-|Rasbeery pi Zero 2W                        |Runs the camera and Geo-Tags all photographs                    |1       |16.35           |https://www.canakit.com/raspberry-pi-zero-2-w.html?defpid=4783                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |Canakit        |
-|680nm Round 12mm Bandpass Filter           |This blocks visible blue/green light and transmits red and NIR  |1       |3.71            |https://www.aliexpress.us/item/3256805254640843.html?spm=a2g0o.productlist.main.1.2953k245k245uS&algo_pvid=d7a8e6fe-5ca5-4b15-8f44-762f4799ea06&algo_exp_id=d7a8e6fe-5ca5-4b15-8f44-762f4799ea06-0&pdp_ext_f=%7B%22order%22%3A%2266%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%213.71%213.71%21%21%2125.38%2125.38%21%40210311a017755035369147864ed8bb%2112000050054358293%21sea%21US%217516280209%21ABX%211%210%21n_tag%3A-29910%3Bd%3A54324566%3Bm03_new_user%3A-29895&curPageLogUid=7GVMzNYJDs36&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005005440955595%7C_p_origin_prod%3A                                                                                                                                    |Aliexpress     |
-|14 Awg wire                                |Battery to PDB main power                                       |2       |1.56            |https://www.aliexpress.us/item/3256801382642712.html?spm=a2g0o.productlist.main.7.3d8469c32cXu0k&algo_pvid=0765a602-5743-4f18-8a30-0275b2811fef&algo_exp_id=0765a602-5743-4f18-8a30-0275b2811fef-6&pdp_ext_f=%7B%22order%22%3A%2236629%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21USD%212.77%212.13%21%21%212.77%212.13%21%40210328c017754911951031595e3e76%2112000029411871157%21sea%21US%217516280209%21ABX%211%210%21n_tag%3A-29910%3Bd%3A54324566%3Bm03_new_user%3A-29895&curPageLogUid=WltzJ5SEImxX&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005001568957464%7C_p_origin_prod%3A                                                                                                                                   |Aliexpress     |
-|18awg wire                                 |ESC to motor and PDB to ESC power wiring                        |1       |3.69            |https://www.aliexpress.us/item/3256806280998161.html?spm=a2g0o.detail.0.0.6b9eBirjBirjZr&mp=1&pdp_npi=6%40dis%21USD%21USD%203.69%21USD%203.69%21%21USD%203.69%21%21%21%402101e2b617754910106364348e3565%2112000037884918185%21ct%21US%217516280209%21%211%210%21&_gl=1*y7z0wt*_gcl_aw*R0NMLjE3NzU0OTA4MjQuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4NE9YV0QyYV9DaGNUS0N1aVlGWDl0aFNRN1RTUGVvTVZ2bHNCcHI0Nkwxb1dKb21pRHF0MGFBdTBaRUFMd193Y0I.*_gcl_dc*R0NMLjE3NzU0OTA4MjQuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4NE9YV0QyYV9DaGNUS0N1aVlGWDl0aFNRN1RTUGVvTVZ2bHNCcHI0Nkwxb1dKb21pRHF0MGFBdTBaRUFMd193Y0I.*_gcl_au*MTY0NzU5ODU1Ny4xNzc1NDI3NDU5*_ga*MTU0MjkxNjM2NjEwMDA5Ni4xNzc1NDI3NDUyNjg4*_ga_VED1YSGNC7*czE3NzU0OTA0MDMkbzUkZzEkdDE3NzU0OTEwMTAkajYwJGwwJGgw&gatewayAdapt=glo2usa     |Aliexpress     |
-|UBEC 5V 3A                                 |Steps down battery voltage to regulated 5v                      |2       |2.33            |https://www.aliexpress.us/item/3256803510775753.html?spm=a2g0o.detail.0.0.c61bNxFVNxFV85&mp=1&pdp_npi=6%40dis%21USD%21USD%204.75%21USD%202.33%21%21USD%202.33%21%21%21%402101e2b617754907483376787e3565%2112000026842876447%21ct%21US%217516280209%21%212%210%21&_gl=1*1nixihr*_gcl_aw*R0NMLjE3NzU0OTA4MjQuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4NE9YV0QyYV9DaGNUS0N1aVlGWDl0aFNRN1RTUGVvTVZ2bHNCcHI0Nkwxb1dKb21pRHF0MGFBdTBaRUFMd193Y0I.*_gcl_dc*R0NMLjE3NzU0OTA4MjQuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajE4NE9YV0QyYV9DaGNUS0N1aVlGWDl0aFNRN1RTUGVvTVZ2bHNCcHI0Nkwxb1dKb21pRHF0MGFBdTBaRUFMd193Y0I.*_gcl_au*MTY0NzU5ODU1Ny4xNzc1NDI3NDU5*_ga*MTU0MjkxNjM2NjEwMDA5Ni4xNzc1NDI3NDUyNjg4*_ga_VED1YSGNC7*czE3NzU0OTA0MDMkbzUkZzEkdDE3NzU0OTA4MjgkajU1JGwwJGgw&gatewayAdapt=glo2usa    |Aliexpress     |
-|4S 14.8V 3300 XT60                         |Battery                                                         |1       |29.54           |https://www.aliexpress.us/item/3256801236381704.html?spm=a2g0o.detail.0.0.2498lHqHlHqHpw&mp=1&pdp_npi=6%40dis%21USD%21USD%2047.64%21USD%2029.54%21%21USD%2029.54%21%21%21%402101e2b617754906048363830e3565%2112000016056313431%21ct%21US%217516280209%21%211%210%21&_gl=1*3hkfwz*_gcl_aw*R0NMLjE3NzU0ODY5NzcuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajEtQk0tbkI2el8zUWlkOUtXNlIwdkJENHU2R1cweG9hQjRnS1NadlYzRzlBTGRUemxvenNnSWFBcWN5RUFMd193Y0I.*_gcl_dc*R0NMLjE3NzU0ODY5NzcuQ2owS0NRandzODNPQmhENEFSSXNBQ2JsajEtQk0tbkI2el8zUWlkOUtXNlIwdkJENHU2R1cweG9hQjRnS1NadlYzRzlBTGRUemxvenNnSWFBcWN5RUFMd193Y0I.*_gcl_au*MTY0NzU5ODU1Ny4xNzc1NDI3NDU5*_ga*MTU0MjkxNjM2NjEwMDA5Ni4xNzc1NDI3NDUyNjg4*_ga_VED1YSGNC7*czE3NzU0OTA0MDMkbzUkZzEkdDE3NzU0OTA2MDUkajIzJGwwJGgw&gatewayAdapt=glo2usa  |Aliexpress     |
-|F450 Frame Kit                             |Main Body of Drone                                              |1       |14.90           |https://www.aliexpress.us/item/3256806672939725.html?aff_fcid=24daa07710d54e07a58dc0fbd93dee3d-1775520035109-07294-_c4CX4GQL&tt=CPS_NORMAL&aff_fsk=_c4CX4GQL&aff_platform=shareComponent-detail&sk=_c4CX4GQL&aff_trace_key=24daa07710d54e07a58dc0fbd93dee3d-1775520035109-07294-_c4CX4GQL&terminal_id=07a274213e4d4b48be06d9a685be612e&afSmartRedirect=y&gatewayAdapt=glo2usa                                                                                                                                                                                                                                                                                                                                                                                                  |AliExpress     |
+# Project OSCAR — Bill of Materials
+
+> Custom 850mm endurance agricultural mapping quadcopter
+
+---
+
+## Frame
+
+| Item | Qty | Cost | Purpose |
+|------|:---:|-----:|---------|
+| Custom 850mm frame (self-designed + 3D printed parts) | 1 | $50.00 | Core structure — round-tube CF frame with internal wire routing and clamp motor mounts |
+| Round CF tubes — 16mm OD × 2mm wall × 500mm | 4 | $13.99 | Arms — 2mm wall critical at 325mm arm length to prevent flex oscillation |
+| M3 Screw Assortment (motor mounts) | 1 | $9.99 | Frame assembly — motor mount fasteners |
+| M3 Screw Assortment (FC/ESC stack) | 1 | $8.99 | Frame assembly — flight controller and ESC retention |
+| Heat-set inserts M3 × OD4.5 | 1 | $3.03 | Motor mount clamp inserts |
+| Landing gear CF tubes — 14mm OD × 250mm | 4 | ~$10.00 | Legs — same round CF tube stock, smaller OD |
+| Landing gear rubber feet | 4 | ~$4.00 | Landing shock absorption |
+
+---
+
+## Propulsion
+
+| Item | Qty | Cost | Purpose |
+|------|:---:|-----:|---------|
+| 4114 320KV brushless motors | 4 | $43.02 | Low-KV motors for 17″ props on 6S — ~3,500g max thrust each, 25mm bolt pattern |
+| 1755 carbon fiber props (2× CW, 2× CCW) | 2 pairs | $11.85 | CF over plastic — at 850mm tip speeds plastic props flex and reduce efficiency |
+
+---
+
+## Power
+
+| Item | Qty | Cost | Purpose |
+|------|:---:|-----:|---------|
+| 6S 5000mAh LiPo 45C XT90 | 1 | $54.99 | Main power — 22.2V nominal, 111Wh total |
+| XT90 Female → XT60 Male adapter | 1 | $1.14 | Battery and power lead interface |
+| UBEC 5V 3A (2-pack) | 1 pk | $2.23 | Two dedicated 5V rails — one for FC, one for Pi |
+| 12 AWG silicone wire — red + black, 1m each | 1 | $0.99 | Main battery leads — rated for 6S current draw |
+| 18 AWG silicone wire | 1 | $3.14 | Motor phase extensions through arm tubes |
+| Heat shrink assortment 2–12mm | 1 | $2.52 | Insulate all solder joints |
+
+---
+
+## Flight Control
+
+| Item | Qty | Cost | Purpose |
+|------|:---:|-----:|---------|
+| Matek H743 Slim V3 flight controller | 1 | $74.51 | Main flight computer |
+| Holybro PM06 V2 power module | 1 | $20.99 | Power distribution |
+| M8N GPS module with compass | 1 | $31.24 | Position hold, RTL, waypoint navigation — external compass on mast |
+| GPS mast / standoff 8–10cm | 1 | ~$4.00 | Clears frame arms at 850mm span |
+| SiK 915MHz telemetry pair | 1 | $58.99 | Live MAVLink to laptop — mission monitoring over-air |
+| FlySky FS-i6 TX + FS-iA6B RX bundle | 1 | $49.99 | RC control — 6 channels, iBus, receiver included |
+
+---
+
+## Compute / Payload
+
+| Item | Qty | Cost | Purpose |
+|------|:---:|-----:|---------|
+| Raspberry Pi Zero 2W | 1 | $18.00 | Companion computer — MAVLink listener, distance trigger, camera capture, geotagging |
+| Raspberry Pi Camera v2 NoIR 8MP | 1 | $15.00 | NIR-capable sensor for NDVI — IR-cut filter removed |
+| 22-pin → 15-pin CSI ribbon cable 15cm | 1 | $2.50 | Required adapter for Pi Zero 2W 22-pin CSI port |
+| 680nm bandpass filter 12mm round | 1 | $3.23 | Blocks visible blue/green, transmits red + NIR for NDVI channel separation |
+| Single-axis passive gimbal (custom) | 1 | ~$8.00 | Self-designed pendulum camera stabilizer — period calculated to avoid pitch resonance |
+| 32GB microSD card Class 10 A1 | 1 | ~$8.00 | Pi OS and survey image storage |
+
+---
+
+## Hardware & Consumables
+
+| Item | Qty | Cost | Purpose |
+|------|:---:|-----:|---------|
+| Anti-vibration FC damper grommets | 1 pk | $0.99 | Isolate FC IMU from motor vibration |
+| Blue Loctite 243 threadlocker | 1 | $9.99 | Motor mount bolts and prop adapters |
+| Zip ties 2.5mm × 100 | 1 pk | $0.99 | Wire management inside hub |
+| Kapton tape (polyimide) | 1 roll | $0.99 | Insulate FC and ESC contacts |
+
+---
+
+## Cost Summary
+
+| Category | Subtotal |
+|----------|:--------:|
+| Frame | ~$99 |
+| Propulsion | ~$55 |
+| Power | ~$65 |
+| Flight Control | ~$239 |
+| Compute / Payload | ~$55 |
+| Hardware & Consumables | ~$13 |
+| **Total (estimated)** | **~$526** |
