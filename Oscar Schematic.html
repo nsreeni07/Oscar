@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0d0f14; }
+body { font-family: "Anthropic Sans", sans-serif; padding: 16px; }
+
+canvas { display: block; width: 100%; border-radius: 8px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const W = 1400, H = 820;
+canvas.width = W; canvas.height = H;
+const ctx = canvas.getContext('2d');
+
+// ─── helpers ───────────────────────────────────────────────────────────────
+function roundRect(x, y, w, h, r, fill, stroke, sw=1.5) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y); ctx.arcTo(x+w, y, x+w, y+r, r);
+  ctx.lineTo(x+w, y+h-r); ctx.arcTo(x+w, y+h, x+w-r, y+h, r);
+  ctx.lineTo(x+r, y+h); ctx.arcTo(x, y+h, x, y+h-r, r);
+  ctx.lineTo(x, y+r); ctx.arcTo(x, y, x+r, y, r);
+  ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = sw; ctx.stroke(); }
+}
+
+function label(text, x, y, size=11, color='#ccc', align='left', weight='normal') {
+  ctx.fillStyle = color;
+  ctx.font = `${weight} ${size}px "Anthropic Sans", sans-serif`;
+  ctx.textAlign = align;
+  ctx.fillText(text, x, y);
+}
+
+function mlabel(lines, x, y, size=10, color='#aaa', align='left', lh=14) {
+  lines.forEach((ln, i) => label(ln, x, y + i*lh, size, color, align));
+}
+
+function box(x, y, w, h, bg, border, title, titleColor, lines, lineColor='#aaa') {
+  roundRect(x, y, w, h, 6, bg, border, 1.5);
+  label(title, x+w/2, y+16, 11, titleColor, 'center', '600');
+  lines.forEach((ln, i) => label(ln, x+w/2, y+30+i*13, 9.5, lineColor, 'center'));
+}
+
+function panelBox(x, y, w, h, bg, border, title, titleColor) {
+  roundRect(x, y, w, h, 8, bg, border, 2);
+  ctx.fillStyle = titleColor;
+  ctx.font = `600 10px "Anthropic Sans", sans-serif`;
+  ctx.textAlign = 'left';
+  ctx.fillText(title, x+10, y+14);
+}
+
+// Wire drawing
+function wire(x1, y1, x2, y2, color, dashed=false, w=2) {
+  ctx.beginPath();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = w;
+  if (dashed) ctx.setLineDash([6, 4]);
+  else ctx.setLineDash([]);
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function wireL(x1, y1, x2, y2, color, dashed=false, w=2) {
+  // L-shaped: horizontal then vertical
+  ctx.beginPath();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = w;
+  if (dashed) ctx.setLineDash([6, 4]);
+  else ctx.setLineDash([]);
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function wireZ(x1, y1, x2, y2, color, dashed=false, w=2) {
+  // mid-bend: down then across then down
+  const mx = (x1+x2)/2;
+  ctx.beginPath();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = w;
+  if (dashed) ctx.setLineDash([6, 4]);
+  else ctx.setLineDash([]);
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(mx, y1);
+  ctx.lineTo(mx, y2);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function arrowHead(x, y, dir='right', color='#aaa') {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  if (dir === 'right') { ctx.moveTo(x,y-4); ctx.lineTo(x+7,y); ctx.lineTo(x,y+4); }
+  if (dir === 'left')  { ctx.moveTo(x,y-4); ctx.lineTo(x-7,y); ctx.lineTo(x,y+4); }
+  if (dir === 'down')  { ctx.moveTo(x-4,y); ctx.lineTo(x,y+7); ctx.lineTo(x+4,y); }
+  if (dir === 'up')    { ctx.moveTo(x-4,y); ctx.lineTo(x,y-7); ctx.lineTo(x+4,y); }
+  ctx.closePath(); ctx.fill();
+}
+
+// ─── background ────────────────────────────────────────────────────────────
+roundRect(0, 0, W, H, 10, '#0d0f14', null);
+
+// title
+label('OSCAR UAV — Full Wiring Schematic', W/2, 32, 18, '#e0ddd0', 'center', '500');
+label('850mm · 6S · Matek H743 Slim V3 · ArduPilot', W/2, 52, 11, '#555', 'center');
+
+// ═══════════════════════════════════════════════════════════════
+// LEGEND (top-left)
+// ═══════════════════════════════════════════════════════════════
+const lx = 30, ly = 70;
+roundRect(lx, ly, 220, 105, 6, '#111214', '#252830', 1);
+label('Wire Legend', lx+10, ly+14, 9.5, '#777', 'left', '600');
+
+function legLine(y, color, dash, text) {
+  ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=3;
+  if(dash) ctx.setLineDash([5,4]); else ctx.setLineDash([]);
+  ctx.moveTo(lx+10, ly+y); ctx.lineTo(lx+55, ly+y); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#999'; ctx.font='9.5px "Anthropic Sans", sans-serif';
+  ctx.textAlign='left'; ctx.fillText(text, lx+62, ly+y+3.5);
+}
+legLine(27, '#c97d10', false, '12 AWG — main battery power');
+legLine(43, '#9b5520', false, '18 AWG — motor phase');
+legLine(59, '#38b860', false, '22 AWG — regulated 5V (UBEC)');
+legLine(75, '#7070cc', true,  '26 AWG — signal (UART, I2C, iBus)');
+legLine(91, '#6688aa', true,  '22 AWG — MAVLink (Pi ↔ FC)');
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL: POWER SUBSYSTEM (top center)
+// ═══════════════════════════════════════════════════════════════
+panelBox(270, 68, 500, 175, '#14110a', '#5a4010', 'POWER SUBSYSTEM', '#c8800a');
+
+// Battery (center of power panel)
+box(410, 88, 170, 80, '#2a1e05', '#7a5510', '6S LiPo Battery', '#f0b040',
+    ['5000mAh · 45C · 22.2V nom.','111Wh · XT90 connector','12 AWG silicone leads'], '#c8901a');
+
+// UBEC 1
+box(285, 88, 115, 70, '#1e1605', '#604010', 'UBEC 1', '#d09020',
+    ['5V · 3A output','→ Flight Controller','22 AWG 5V rail'], '#a07018');
+
+// UBEC 2
+box(590, 88, 115, 70, '#1e1605', '#604010', 'UBEC 2', '#d09020',
+    ['5V · 3A output','→ Raspberry Pi','22 AWG 5V rail'], '#a07018');
+
+// PM06 V2
+box(285, 168, 420, 55, '#18130a', '#4a3008', 'PM06 V2 Power Module', '#b07820',
+    ['Power distribution · XT90 in · current sense · feeds Matek H743 main power input'], '#887018');
+
+// ─── power wires ───
+// battery → UBEC 1
+wire(410, 128, 400, 128, '#c97d10', false, 2.5);
+wire(400, 128, 400, 123, '#c97d10', false, 2.5);
+wire(400, 123, 340, 123, '#c97d10', false, 2.5);
+arrowHead(340, 123, 'left', '#c97d10');
+
+// battery → UBEC 2
+wire(580, 128, 590, 128, '#c97d10', false, 2.5);
+wire(590, 128, 590, 123, '#c97d10', false, 2.5);
+wire(590, 123, 705, 123, '#c97d10', false, 2.5);
+arrowHead(705, 123, 'right', '#c97d10');
+
+// battery → PM06
+wire(495, 168, 495, 185, '#c97d10', false, 2.5);
+arrowHead(495, 185, 'down', '#c97d10');
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL: PROPULSION (left)
+// ═══════════════════════════════════════════════════════════════
+panelBox(30, 270, 230, 290, '#110a10', '#4a2040', 'PROPULSION SUBSYSTEM', '#d060a0');
+
+// Motors
+box(40, 292, 100, 80, '#200a18', '#602040', 'Motor 1', '#e888b8',
+    ['Front-Right · CW','4114 · 320KV','Black nut · CW prop'], '#c06090');
+box(150, 292, 100, 80, '#200a18', '#602040', 'Motor 2', '#e888b8',
+    ['Front-Left · CCW','4114 · 320KV','White nut · CCW prop'], '#c06090');
+box(40, 382, 100, 80, '#200a18', '#602040', 'Motor 3', '#e888b8',
+    ['Rear-Right · CCW','4114 · 320KV','White nut · CCW prop'], '#c06090');
+box(150, 382, 100, 80, '#200a18', '#602040', 'Motor 4', '#e888b8',
+    ['Rear-Left · CW','4114 · 320KV','Black nut · CW prop'], '#c06090');
+
+// 1755 CF Props label
+box(40, 470, 210, 50, '#160810', '#401830', '1755 CF Props — 17×5.5"', '#d070a0',
+    ['2× CW · 2× CCW · 18 AWG phase × 3 per motor'], '#905060');
+
+// motor → ESC arrows (orange dashes going right)
+// will be drawn after FC panel
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL: FLIGHT CONTROL (center)
+// ═══════════════════════════════════════════════════════════════
+panelBox(270, 270, 500, 290, '#060c18', '#0d3060', 'FLIGHT CONTROL SUBSYSTEM', '#4a90d4');
+
+// FC main block
+box(290, 295, 460, 130, '#091a35', '#1a5090', 'Matek H743 Slim V3', '#88c8f0',
+    ['STM32H743 · ArduPilot / INAV · Built-in barometer',
+     'UART1  UART2  UART3  UART4 · I2C · RC input',
+     'Motor outputs M1 M2 M3 M4 · 5V BEC out · SD card'], '#5090c0');
+
+// PM06 → FC power (from bottom of power panel)
+wire(495, 223, 495, 295, '#c97d10', false, 2.5);
+arrowHead(495, 295, 'down', '#c97d10');
+
+// UBEC1 → FC (22AWG green)
+wireL(342, 158, 342, 340, '#38b860', false, 1.5);
+wire(342, 340, 290, 340, '#38b860', false, 1.5);
+arrowHead(290, 340, 'left', '#38b860');
+label('22 AWG 5V', 298, 365, 8.5, '#38b860');
+
+// ─── Motor phase wires (orange dashed, left side of FC) ───
+const mPhaseY = [333, 353, 373, 393];
+const mPhaseLabel = ['M1 — 3× 18 AWG phase', 'M2 — 3× 18 AWG phase', 'M3 — 3× 18 AWG phase', 'M4 — 3× 18 AWG phase'];
+mPhaseY.forEach((y, i) => {
+  wire(270, y, 290, y, '#9b5520', true, 1.5);
+  arrowHead(285, y, 'right', '#9b5520');
+});
+// motor lines going left
+[332, 352, 372, 392].forEach((y,i) => {
+  wire(150+50, 292+20+i*10, 270, y, '#9b5520', true, 1.5);
+});
+// simplified - draw straight lines from motor area to FC
+ctx.strokeStyle='#9b5520'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+ctx.beginPath(); ctx.moveTo(260, 332); ctx.lineTo(290, 340); ctx.stroke();
+ctx.beginPath(); ctx.moveTo(260, 350); ctx.lineTo(290, 352); ctx.stroke();
+ctx.beginPath(); ctx.moveTo(260, 368); ctx.lineTo(290, 364); ctx.stroke();
+ctx.beginPath(); ctx.moveTo(260, 386); ctx.lineTo(290, 376); ctx.stroke();
+ctx.setLineDash([]);
+
+label('3× 18 AWG phase · 3.5mm bullet', 265, 410, 8.5, '#805030', 'right');
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL: COMPUTE / PAYLOAD (center-bottom)
+// ═══════════════════════════════════════════════════════════════
+panelBox(270, 575, 500, 210, '#060f08', '#0a3818', 'COMPUTE / PAYLOAD SUBSYSTEM', '#38b860');
+
+// Pi Zero 2W
+box(290, 598, 220, 100, '#081a10', '#155028', 'Raspberry Pi Zero 2W', '#60e890',
+    ['Pin 2 = 5V · Pin 6 = GND','GPIO14 (pin 8) = UART TX','GPIO15 (pin 10) = UART RX','CSI port = camera'], '#38b060');
+
+// Pi Camera
+box(290, 708, 140, 60, '#06150c', '#0f3a20', 'Pi Camera v2 NoIR', '#45c870',
+    ['8MP · 22-pin CSI ribbon','IR-cut filter removed'], '#309050');
+
+// 680nm filter
+box(440, 708, 130, 60, '#06100a', '#0a2a15', '680nm Filter', '#30a858',
+    ['12mm bandpass','Red + NIR only'], '#258040');
+
+// CSI ribbon wire
+wire(360, 698, 360, 708, '#38b860', false, 1.5);
+arrowHead(360, 708, 'down', '#38b860');
+label('22→15 pin CSI ribbon', 367, 704, 8.5, '#38b860');
+
+// filter connects to camera
+wire(440, 738, 430, 738, '#38b860', false, 1.5);
+arrowHead(432, 738, 'left', '#38b860');
+
+// UBEC2 → Pi (green 22awg)
+wire(648, 158, 648, 580, '#38b860', false, 1.5);
+wire(648, 648, 510, 648, '#38b860', false, 1.5);
+arrowHead(510, 648, 'left', '#38b860');
+label('22 AWG 5V', 520, 668, 8.5, '#38b860');
+
+// FC → Pi MAVLink (UART4, blue dashed)
+wire(495, 425, 495, 598, '#6688aa', true, 1.5);
+arrowHead(495, 595, 'down', '#6688aa');
+label('UART4 TX↔RX · MAVLink 115200', 500, 520, 8.5, '#5577aa');
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL: PERIPHERALS (right)
+// ═══════════════════════════════════════════════════════════════
+panelBox(790, 68, 230, 540, '#0a0d0a', '#202820', 'PERIPHERALS', '#708870');
+
+// M8N GPS
+box(800, 90, 210, 80, '#121a12', '#2a3a2a', 'M8N GPS + Compass', '#90c890',
+    ['UART: TX · RX · 5V · GND','Compass: SDA · SCL (I2C)','Mounted on 8–10cm mast'], '#608060');
+
+// FlySky
+box(800, 182, 210, 70, '#121a12', '#2a3a2a', 'FlySky FS-iA6B', '#90c890',
+    ['RC Receiver · 6CH · iBus out','5V · GND from FC'], '#608060');
+
+// SiK Telemetry
+box(800, 264, 210, 80, '#121a12', '#2a3a2a', 'SiK Telemetry (air)', '#90c890',
+    ['915MHz · 100mW','UART TX · RX · 5V · GND','Pairs with ground module'], '#608060');
+
+// Ground station
+box(800, 356, 210, 60, '#0f1610', '#1e2c1e', 'Ground Station', '#607860',
+    ['SiK USB radio · Laptop','Mission Planner · MAVLink'], '#406050');
+
+// ─── UART config box ───
+roundRect(800, 430, 210, 80, 6, '#080f08', '#143014', 1.5);
+label('INAV / ArduPilot UART', 905, 445, 9, '#409040', 'center', '600');
+label('UART1 (GPS):      115200', 810, 462, 8.5, '#50b860');
+label('UART2 (RC iBus):  115200', 810, 476, 8.5, '#50b860');
+label('UART3 (Telemetry): 57600', 810, 490, 8.5, '#50b860');
+label('UART4 (Pi MAVLink):115200', 810, 504, 8.5, '#50b860');
+
+// ─── Safety box ───
+roundRect(800, 522, 210, 80, 6, '#0f0808', '#401818', 1.5);
+label('Safety — do in order', 905, 537, 9, '#c04040', 'center', '600');
+['1. Solder & heatshrink all joints','2. Verify UBECs = 5V (multimeter)','3. Flash & configure FC first','4. Connect battery LAST','5. Mount props LAST of all'].forEach((t,i) => {
+  label(t, 808, 552+i*12, 8.5, '#c07070');
+});
+
+// ─── wires: FC → peripherals ───
+const fcRightX = 750;
+
+// UART1 → GPS (blue dashed)
+wireL(fcRightX, 310, 800, 130, '#7070cc', true, 1.5);
+arrowHead(797, 130, 'right', '#7070cc');
+label('UART1 TX↔RX · 5V · GND · 26 AWG', fcRightX+2, 308, 8, '#6060aa');
+
+// I2C → GPS compass
+wire(fcRightX, 324, 800, 140, '#7070cc', true, 1.5);
+label('I2C SDA · SCL · 26 AWG', fcRightX+2, 322, 8, '#6060aa');
+
+// UART2 → FlySky
+wireL(fcRightX, 338, 800, 217, '#7070cc', true, 1.5);
+arrowHead(797, 217, 'right', '#7070cc');
+label('iBus · 5V · GND · 26 AWG', fcRightX+2, 336, 8, '#6060aa');
+
+// UART3 → SiK
+wireL(fcRightX, 352, 800, 300, '#7070cc', true, 1.5);
+arrowHead(797, 300, 'right', '#7070cc');
+label('TX↔RX · 5V · GND · 26 AWG', fcRightX+2, 350, 8, '#6060aa');
+
+// SiK → Ground (915MHz wireless)
+wire(800, 386, 790, 386, '#6688aa', true, 1.5);
+label('915 MHz wireless', 805, 422, 8.5, '#556688');
+
+// ═══════════════════════════════════════════════════════════════
+// FRAME / NOTES panel (bottom left)
+// ═══════════════════════════════════════════════════════════════
+roundRect(30, 575, 230, 100, 8, '#0e0e0c', '#252520', 1.5);
+label('850mm Frame Notes', 40, 591, 9.5, '#707060', 'left', '600');
+['Arms carry motor phase wires (18 AWG)','CF tubes 16mm OD · 2mm wall','Internal wire routing · clamp mounts','Anti-vibe grommets under FC stack','Heat-shrink all solder joints before power'].forEach((t,i) => {
+  label(t, 40, 607+i*13, 9, '#555548');
+});
+
+// ─── misc bottom-left notes ───
+roundRect(30, 685, 230, 95, 8, '#0e0a08', '#352010', 1.5);
+label('Consumables', 40, 700, 9.5, '#806040', 'left', '600');
+['Blue Loctite 243 on motor bolts','Kapton tape on FC/ESC contacts','2.5mm zip ties — wire management','Heat shrink 2–12mm assortment'].forEach((t,i) => {
+  label(t, 40, 716+i*13, 9, '#685030');
+});
+
+// ═══════════════════════════════════════════════════════════════
+// re-draw clean wire labels over top of connections in FC area
+// ═══════════════════════════════════════════════════════════════
+// PM06 → FC label
+label('14 AWG  ↕', 498, 265, 9, '#c97d10', 'left');
+
+// watermark / version
+label('OSCAR v1 · rev 2025', W-20, H-10, 8.5, '#2a2a28', 'right');
+
+</script>
+</body>
+</html>
