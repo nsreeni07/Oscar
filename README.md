@@ -5,6 +5,10 @@ Autonomous UAV system that performs precision crop monitoring through systematic
 
 <img width="1625" height="795" alt="Screenshot 2026-05-05 223018" src="https://github.com/user-attachments/assets/3a538533-8a69-4f78-9dde-416353ef1062" />
 
+
+<img width="1110" height="785" alt="Screenshot 2026-05-12 113512" src="https://github.com/user-attachments/assets/066d5c06-10ed-4771-af28-48e4128f38d5" />
+
+
 # Project OSCAR — Bill of Materials
 
 > Custom 850mm endurance agricultural mapping quadcopter
