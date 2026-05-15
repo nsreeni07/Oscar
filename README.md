@@ -3,7 +3,8 @@ Autonomous UAV system that performs precision crop monitoring through systematic
 
 
 
-<img width="1625" height="795" alt="Screenshot 2026-05-05 223018" src="https://github.com/user-attachments/assets/3a538533-8a69-4f78-9dde-416353ef1062" />
+<img width="960" height="786" alt="Screenshot 2026-05-12 180331" src="https://github.com/user-attachments/assets/5cb71a60-cdf0-4a29-b372-2b2cad4f5c3e" />
+<img width="1345" height="641" alt="Screenshot 2026-05-06 182000" src="https://github.com/user-attachments/assets/735606a8-7236-477b-a397-c1ffcca2f356" />
 
 
 <img width="1110" height="785" alt="Screenshot 2026-05-12 113512" src="https://github.com/user-attachments/assets/066d5c06-10ed-4771-af28-48e4128f38d5" />
