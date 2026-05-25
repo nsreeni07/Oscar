@@ -1,5 +1,5 @@
 # Oscar
-Autonomous UAV system that performs precision crop monitoring through systematic aerial imaging and vegetation index mapping across agricultural fields. The drone executes pre-programmed waypoint missions via INAV autopilot, with an onboard Raspberry Pi Zero 2W capturing geotagged near-infrared imagery using a NoIR camera and 680nm bandpass filter at each waypoint. Upon mission completion, imagery is transferred to a ground station running WebODM, which stitches frames into orthomosaic maps and calculated NDVI values to produce color-coded field health maps highlighting crop health, irrigation stress, and potential disease pressure. 
+Autonomous UAV system that performs precision crop monitoring through systematic aerial imaging and vegetation index mapping across agricultural fields. The drone executes pre-programmed waypoint missions via INAV autopilot, with an onboard Raspberry Pi Zero 2W capturing geotagged near-infrared imagery using a NoIR camera and 680nm bandpass filter at each waypoint. After the mission is completed, images are transferred to a ground station running WebODM, which stitches frames into orthomosaic maps and calculated NDVI values to produce color-coded field health maps showing crop health, irrigation stress, and potential disease pressure. 
 
 
 
