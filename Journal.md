@@ -4,7 +4,7 @@ I finalized everything today and the final cost for everything came close to $65
 <img width="1625" height="795" alt="Screenshot 2026-05-05 223018" src="https://github.com/user-attachments/assets/45a92108-5968-4068-9fa5-442831c34047" />
 
 4/26
-Cad Model and Revamp
+Cad Model and Revamp 2 Hours
 Okay this is the final revamp, I am almost done with the cad model for the drone I just to need the motor mounts and the gimbal I made in another file to this one, I also made a new dossier for the drone included updated thrust calculations made it a bit nicer. I'm going to run simulations on this frame in fusion soon hopefully.<img width="1917" height="982" alt="Screenshot 2026-04-26 162501" src="https://github.com/user-attachments/assets/28d806ec-79f9-47fb-9391-9f5ed72f6bb4" />
 
 
