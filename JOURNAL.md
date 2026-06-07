@@ -60,7 +60,7 @@ Created a full wiring diagram in draw.io. Switched flight controller from the F7
 
 Worked through the MAVLink integration between the Raspberry Pi and flight controller in VS Code. This is the communication layer that lets the Pi read GPS coordinates, battery voltage, and flight mode in real time, enabling geotagging and distance-based photo capture. When the Pi arrives, will need to configure hardware UART at 115200 baud and set up pymavlink for message parsing.
 
-Also completed the camera mount CAD. Simplified the design from a full gimbal to a fixed camera holder to cut costs. Added M3 screw holders and plan to mount it to the frame with foam padding to dampen motor vibrations.
+Also completed the camera mount CAD. Simplified the design from a full gimbal to a fixed camera holder to cut costs. Added M3 screw holders and plan to mount it to the frame with foam padding to dampen motor vibrations. 
 
 ![Camera Mount CAD](https://github.com/user-attachments/assets/c3a6ab61-be63-43b8-b35f-f9648f0ea21a)
 
