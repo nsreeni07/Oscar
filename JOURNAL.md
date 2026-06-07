@@ -1,88 +1,128 @@
-5/5
+---
+title: "OSCAR - Autonomous NDVI Agricultural Mapping Drone"
+author: "nsreeni07"
+description: "An 850mm quadcopter designed for autonomous NDVI agricultural mapping using a Raspberry Pi Zero 2W imaging payload and custom carbon fiber frame."
+created_at: "2026-04-05"
+---
 
-Final Draft 2 Hours
+# April 5: Project Research and Initial BOM
 
-I finalized everything today and the final cost for everything came close to $650, I'm paying $550 out of pocket while Stasis I'm hoping will get me a $100. I finished the cad Model adding motor mounts and double checking everything.
-<img width="1625" height="795" alt="Screenshot 2026-05-05 223018" src="https://github.com/user-attachments/assets/45a92108-5968-4068-9fa5-442831c34047" />
+Started the project by reviewing my original UAV plan and identifying gaps. I then researched alternative flight controllers to replace the Pixhawk (too expensive), explored GPS module options, and settled on the battery and power system i will be using. I also learned about the importance of correct wire gauges for safety, Started building the BOM, though there is still a lot left to finalize.
 
-4/26
+![Initial BOM Draft](https://github.com/user-attachments/assets/d4b93ad4-46d0-4e08-bc00-0bdf3df08ad6)
 
-Cad Model and Revamp 2 Hours
+**Total time spent: 2 hours**
 
-Okay this is the final revamp, I am almost done with the cad model for the drone I just to need the motor mounts and the gimbal I made in another file to this one, I also made a new dossier for the drone included updated thrust calculations made it a bit nicer. I'm going to run simulations on this frame in fusion soon hopefully.
-<img width="1917" height="982" alt="Screenshot 2026-04-26 162501" src="https://github.com/user-attachments/assets/28d806ec-79f9-47fb-9391-9f5ed72f6bb4" />
+---
 
+# April 6: System Architecture and Component Research
 
-4/20
+Researched components through forums and videos to finalize what I need to buy. Defined the core concept: use an onboard IR camera to map large areas of land (primary focus: crops) and generate NDVI maps that identify vegetation health, drought, and stress. I then created a system architecture diagram showing how all components connect. Built out initial BOM using AliExpress for lowest cost; current estimate around $200.
 
-Frame Design and Sponsors 4 Hours
+![System Architecture Diagram](https://github.com/user-attachments/assets/a303c29b-844c-457d-b84b-d02380fd948a)
 
-So I worked on my drone frame today I looked through some frames for sale and took inspiration after drawing my own sketch I went into onshape and designed the bottom plate, I'm going to deisgn the top plate after but progress is a bit slow because I got exams right now. Because my new plan is a 850mm drone the cost is quite high so I'm paying about $100 out of pocket and I'm hoping to get $200 from stasis and $200 from otuside sponsors, I have created a list and I'm going to start emailing, I'm hoping it goes well so fingers crossed. But back to the drone frame, I'm gonna use clamps to secure the motor arms together and tightne with m3 nylon bolts and thats pretty much it for today.
-<img width="1124" height="759" alt="Screenshot 2026-04-20 223512" src="https://github.com/user-attachments/assets/139ad086-0a11-44e1-8b2a-872981db6df5" />
+**Total time spent: 2 hours**
 
+---
 
-4/13
+# April 7: NDVI Processing Algorithm
 
-Feedback 1 Hour
+So today I developed the NDVI vegetation index processing algorithm using RGB image data. Since hardware hasn't arrived yet, used sample stock images to simulate drone-captured data. Implemented an NDVI approximation formula (since the NoIR camera mixes IR and red channels rather than isolating them), tested different normalization methods, and debugged division errors and inconsistent results from lighting variation. Ran stock images through the pipeline and got solid outputs. Also started planning a batch processing pipeline for when the drone captures hundreds of images.
 
-I got some feedback on my project and reailzed I had a lot to change, first my tier is too high, and a lot of my project is just buying parts, I've decided to refresh this entire project 1)I'm creating my own custom frame 2)I'm creating my own custom flight computer(not sure about this one yet) 3)I need to see more ways I can save cost I ran new thrust calculations with the setup I want to do and I created a doc that explains everything new I am going to be doing with this project https://docs.google.com/document/d/19ZpP3lER7y1khA4oXiPfYRFo_DdoW_JR/edit
+![NDVI Algorithm Output 1](https://github.com/user-attachments/assets/79d60ad9-ce0d-47ef-8f27-6c86d2082e5a)
+![NDVI Algorithm Output 2](https://github.com/user-attachments/assets/95bf73d7-a267-418b-ab90-0520952bf940)
 
+**Total time spent: 3 hours**
 
-4/11
+---
 
-MAVLink Communication 2 Hours
+# April 8: Waypoint-Based Photo Capture Code and MAVLink Integration
 
-The main work was getting the MAVLink figured out between the rasberry pi and the flight controller. MAVLink is what lets the pi talk to the computer. It's how the Pi will read GPS coordinates, battery voltage, and flight mode in real time during a survey. This is what enable geotagging and distance vases capture. I worked through the full integration in VS code. When I get the Pi I will have configure the hardware UART, on of the UART port need to be configured to output MAVLink at 115200 baud. Then pymavlink handles the message parsing in python. There is a lot more to do with the Pi but that will be when it arrives.
+Scrapped the original time-based photo capture approach (every 2 seconds), which was too unreliable because of speed variation, crosswind, and GPS drift that would happen irl. Replaced it with a waypoint-based capture system using the Haversine Formula to calculate distance between GPS coordinates. The system stores the last capture position and triggers a new photo once the drone has traveled past a set threshold (EX: 5 meters). Wrote the MAVLink communication layer to wait for a heartbeat signal and continuously read GPS data from the M8N module. Next step is integrating the actual camera module and finishing the image stitching pipeline.
 
-The second thing I worked on today was the CAD model for the camera mount. I decided to change the design up to just a camera holder because the codt is really high for the barings and everything so I decided to make it just a camera holder.
-<img width="1204" height="676" alt="Screenshot 2026-04-11 210928" src="https://github.com/user-attachments/assets/c3a6ab61-be63-43b8-b35f-f9648f0ea21a" />
+![Waypoint Capture Code](https://github.com/user-attachments/assets/f7b2ef0f-a559-4ca8-b185-fcaea7e3d3bb)
 
-I added some M3 screw holders, and I'm planning to atttach the screw to the frame with foam in the middle to remove vibrations from the motor. 
+**Total time spent: 2 hours**
 
-4/10  3 Hours
+---
 
-Wiring diagram,Cad Model, Code Revision
+# April 10: Wiring Diagram, BOM Update, and Camera Mount Design
 
-So today I worked on this wiring diagram, I used draw.io, to create my wiring diagram it was a simple diagram adn didnt take too long I also updated my BOM, I previously was planning pn running a F722 flight controller but after some reasearch and asking friend who had experience in drones they said that the Speedybee F405 V4 would be abetter choice the stack version I'm buying comes with a PDB and it has a 4 in 1 esc which means I can save some money. But because of this I ahd to add some female bullet sockets to solder the motor wires to the flight computer. I also hadded some heat shrink for this and fixed up some of my BOM prices which had changed.
-<img width="938" height="619" alt="Screenshot 2026-04-11 210911" src="https://github.com/user-attachments/assets/2a9a5807-04a3-43b5-9779-68fb527b2e9d" />
+Created a full wiring diagram in draw.io. Switched flight controller from the F722 to the Speedybee F405 V4 stack, which includes a PDB and 4-in-1 ESC, saving money and simplifying the build. Updated the BOM to reflect the new FC and adjusted prices. Added female bullet sockets and heat shrink for soldering motor wires to the FC. Also started thinking through the camera mount; considered a stabilizing gimbal with ball bearings for keeping the camera level during flight but holding off due to cost.
 
+![Wiring Diagram](https://github.com/user-attachments/assets/2a9a5807-04a3-43b5-9779-68fb527b2e9d)
 
+**Total time spent: 3 hours**
 
-I also worked on my camera holder, for the NVDI I need the photo to be taken level with the ground with around 5-10 degreed allowed so I thought about making a stabilizing camera mount with ball bearings but I'm still thinking about wheter or not because its kinda expensive to buy everything, I might scratch it but we will have to see.
+---
 
+# April 11: MAVLink Integration and Camera Mount CAD
 
-4/8
+Worked through the MAVLink integration between the Raspberry Pi and flight controller in VS Code. This is the communication layer that lets the Pi read GPS coordinates, battery voltage, and flight mode in real time, enabling geotagging and distance-based photo capture. When the Pi arrives, will need to configure hardware UART at 115200 baud and set up pymavlink for message parsing.
 
-Waypoint Photo Capture Code 2 Hours
+Also completed the camera mount CAD. Simplified the design from a full gimbal to a fixed camera holder to cut costs. Added M3 screw holders and plan to mount it to the frame with foam padding to dampen motor vibrations.
 
-So today I worked on the code for the photo capture system, to accurately create a big map of farmland i need to take multiple smaller photos, my orignal plan was to create a time-based code that takes photos every 2 seconds, i quickly realized that this doesnt accoutn for many real world diffrences such as diffrence speed, crosswind, and slight deviation. These added up could give an glitchy or messed up final picture so I decided on a diffrent approach. Instead of time Im going to use a waypoint based capture code, Which takes photo based on GPS coordinates. I used the Haversine Formula to calculate the distance between 2 points, I then worked on the camera capture logic, the program stored the last gps position and compares it to the current position if the calcualted distance is greater than a set distance(Ex:5 Meters), the system takes a photo, Im later going to replace this with the camera but this is just the basic logic.
-<img width="1530" height="1041" alt="Screenshot 2026-04-08 184641" src="https://github.com/user-attachments/assets/f7b2ef0f-a559-4ca8-b185-fcaea7e3d3bb" />
+![Camera Mount CAD](https://github.com/user-attachments/assets/c3a6ab61-be63-43b8-b35f-f9648f0ea21a)
 
-I then wrote the actual Mavlink communication into the code that is going to be used on the drone, I wrote a code that waits for the "heartbeat" signal for communication, and constantly reads the gps data from the M8N module, It then uses the same logic and formulas to take photos. I'm going to keep working today and maybe finish the code for image stiching pipeline that creates the full image
+**Total time spent: 2 hours**
 
-4/7
+---
 
-NDVI    3 Hours
+# April 13: Project Feedback and Redesign
 
-I worked on developing the NDVI (vegetation index) processing algorithm using RGB image data. Since I don’t have any of the hardware yet, I used sample images from online to simulate drone-captured data. I added the NDVI approximation formula and tested different normalization methods to improve visibility. A lot of time went into debugging issues like random division errors and inconsistent results due to lighting differences. This helped a lot in understanding how image processing will work once the drone is operational and how this is probably going to be the longest part of this entire project
-<img width="1098" height="923" alt="Screenshot 2026-04-08 192909" src="https://github.com/user-attachments/assets/0ffbac3f-6835-4856-a7c0-ed64fa7035b4" />
+Received feedback and identified major issues with the current plan: tier was too high and most of the project was just purchasing parts with little original engineering. Decided to do a full refresh:
+1. Design a custom frame from scratch
+2. Explore building a custom flight computer (TBD)
+3. Find more ways to reduce cost
 
-I then took some stock images from the web and ran it through this code and got some pretty decent outputs, im also working on a pipleline for when I get 100s of images from the drone in real life. How this entire thing works is the NoIR camera captures infrared but cannot isolate it from the red channel(the red light and infared are mixed together kinda), so I implemented an NDVI approximation instead of true NDVI and with this the forumula((NIR - Red) / (NIR + Red)) is applied to every pixel in the image to generate a new dataset representing vegetation health. So for the first part of the project its going to be just a basic proof of concept and I'm plannign to buy my own cheap real Infared camera to actually see this work in the future even though infared is CRAZY expensive (cheapest is $400)
-<img width="673" height="388" alt="Screenshot 2026-04-07 192434" src="https://github.com/user-attachments/assets/79d60ad9-ce0d-47ef-8f27-6c86d2082e5a" />
-<img width="1282" height="708" alt="Screenshot 2026-04-07 192440" src="https://github.com/user-attachments/assets/95bf73d7-a267-418b-ab90-0520952bf940" />
+Ran new thrust calculations and created an updated project doc outlining the new direction: [Updated Project Doc](https://docs.google.com/document/d/19ZpP3lER7y1khA4oXiPfYRFo_DdoW_JR/edit)
 
-4/6 
+**Total time spent: 1 hour**
 
-2 Hours
+---
 
-So I looked through a bunch of forums and watched some videos to get an idea of what I need to buy, I also planned out the structure for my drone The whole idea for my drone is to use the onboard IR camera to map huge amounts of land ideally crops, but can also be used for Pastures(Tracking animals), or flying over highways and monitoring car speeds, but for now the agricultural side is what I am focusing on. With that data I can create a Normalized Diffrence vegetation index (NDVI). These maps help identify healthy vegetation, stress, drought, or barren areas, with NDVI. I also made a system architecture diagram that shows how everything will be.
-<img width="679" height="734" alt="Screenshot 2026-04-06 140014" src="https://github.com/user-attachments/assets/a303c29b-844c-457d-b84b-d02380fd948a" />
+# April 20: Custom Frame Design and Sponsorship Outreach
 
-All of my part in my current BOM are from aliexpress because its the cheapest, there are other parts that I have to buy myself, are mostly from amazon, my final is coming out to $200, My future plan for this project is to create my own custom frame and make my own custom software but for now I gotta finish this. I'm going to keep coding today and finish off the code and then journal that.
+Started designing the custom 850mm drone frame. Researched existing frames for reference, drew a sketch, then modeled the bottom plate in Onshape. Top plate design coming next but progress is slow due to exams. I also decided to use clamps with M3 nylon bolts to secure the motor arms.
 
-4/5  
+On the funding side: total build cost at this scale is high. Plan is to cover ~$100 out of pocket and pursue ~$200 from Stasis and ~$200 from outside sponsors. Created a sponsor outreach list and will start emailing.
 
-2 Hours
+![Frame Bottom Plate CAD](https://github.com/user-attachments/assets/139ad086-0a11-44e1-8b2a-872981db6df5)
 
-Today was mostly just reasearching and figuring out my UAV project. I started by going though my orignal plan I previously had and saw a lot of gaps and decided to do some reasearch to fix those haps, I spen time looking into diffrent components and one big change I made was to with a cheaper flight controller instaead of the pixhawk I orignally intended on using because its a little to expensive. I als reasearched GPS modules and found more ways i could optimize costs. I also figured out my battery adn power system. I learned battery choice is a big part and I also realized that using the wrong wire gauges can be pretty dangerous. I started working on my BOM but I still got a lot to finish.
-<img width="341" height="280" alt="Screenshot 2026-04-05 222717" src="https://github.com/user-attachments/assets/d4b93ad4-46d0-4e08-bc00-0bdf3df08ad6" />
+**Total time spent: 4 hours**
+
+---
+
+# April 26: CAD Model Revamp and Updated Dossier
+
+Completed the final CAD revamp, almost done with the full drone model(hopefully?). Still need to merge the motor mounts from a separate file into the main assembly. Also created an updated project dossier with revised thrust calculations and cleaner formatting. Planning to run frame simulations in Fusion soon.
+
+![Full CAD Model](https://github.com/user-attachments/assets/28d806ec-79f9-47fb-9391-9f5ed72f6bb4)
+
+**Total time spent: 2 hours**
+
+---
+
+# May 5: Final CAD and Budget Finalized
+
+Finalized the complete CAD model, adding motor mounts and double-checking the full assembly. Total project cost came in at approximately $650. Paying $550 out of pocket; hoping Stasis contributes $100.
+
+![Final CAD Assembly](https://github.com/user-attachments/assets/45a92108-5968-4068-9fa5-442831c34047)
+
+**Total time spent: 2 hours**
+
+---
+
+# May 7: CAD Fixes and Pitch Refresh
+
+Did some small but important updates today, I went back into the CAD and edited the holes to 4.85mm to get a better fit for the hardware. I also refreshed my pitch and cleaned it up a bit, feels a lot more solid now. Nothing too crazy today just tying up loose ends.
+
+**Total time spent: 0.4 hour**
+
+---
+
+# June 6: Flight Controller Switch and Capacitor
+
+Did some BOM updates today, I switched the flight controller from the F722 to the Speedybee F405 V4 stack, it comes with a PDB and 4-in-1 ESC built in which saves me some money and I can cut the PMO6 V2 Power module and makes the build cleaner. I also added a capacitor to the BOM to help with voltage spikes from the motors, pretty important for protecting the ESC long term.
+
+**Total time spent: 1 hour**
