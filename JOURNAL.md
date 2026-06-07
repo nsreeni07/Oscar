@@ -117,6 +117,8 @@ Finalized the complete CAD model, adding motor mounts and double-checking the fu
 
 Did some small but important updates today, I went back into the CAD and edited the holes to 4.85mm to get a better fit for the hardware. I also refreshed my pitch and cleaned it up a bit, feels a lot more solid now. Nothing too crazy today just tying up loose ends.
 
+![FC](<img width="942" height="492" alt="Screenshot 2026-06-06 220118" src="https://github.com/user-attachments/assets/fb9de81c-1055-4581-8474-67c4b4913022" />)
+
 **Total time spent: 0.4 hour**
 
 ---
@@ -124,5 +126,7 @@ Did some small but important updates today, I went back into the CAD and edited 
 # June 6: Flight Controller Switch and Capacitor
 
 Did some BOM updates today, I switched the flight controller from the F722 to the Speedybee F405 V4 stack, it comes with a PDB and 4-in-1 ESC built in which saves me some money and I can cut the PMO6 V2 Power module and makes the build cleaner. I also added a capacitor to the BOM to help with voltage spikes from the motors, pretty important for protecting the ESC long term.
+
+![FC](<img width="252" height="201" alt="Screenshot 2026-06-06 215924" src="https://github.com/user-attachments/assets/69a6a3ad-3552-4748-913d-b0f2b7915441" />)
 
 **Total time spent: 1 hour**
