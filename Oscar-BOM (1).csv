@@ -1,0 +1,37 @@
+Category,Item,Link,Qty,Cost,Purpose
+Power,6S 5000mAh LiPo 45C XT90,,1,$0.00,Main power — 22.2V nominal 111Wh total
+Power,XT60 Male,https://tinyurl.com/2z8uudk9,1,$0.00,Battery and power lead interface
+Power,UBEC 5V 3A (2-pack),,1 pk,$0.00,Two dedicated 5V rails — one for FC one for Pi
+Power,12 AWG silicone wire — red + black 1m each,,1,$0.00,Main battery leads — rated for 6S current draw
+Power,18 AWG silicone wire,,1,$0.00,Motor phase extensions through arm tubes
+Power,Heat shrink assortment 2–12mm,,1,$0.00,Insulate all solder joints
+Power Subtotal,,,,,~$65
+Flight Control,Matek H743 Slim V3 flight controller,https://www.amazon.com/HeEHQA-Controller-Compatible-STM32H743VIT6-Barometer/dp/B0DZWXG12P,1,$74.51,Main flight computer
+Flight Control,Holybro PM06 V2 power module,https://holybro.com/products/micro-power-module-pm06-v2,1,$20.99,Power distribution
+Flight Control,M8N GPS module with compass,,1,$0.00,Position hold RTL waypoint navigation — external compass on mast
+Flight Control,SiK 915MHz telemetry pair,https://holybro.com/products/sik-telemetry-radio-v3?variant=41562952302781,1,$58.99,Live MAVLink to laptop — mission monitoring over-air
+Flight Control,FlySky FS-i6 TX + FS-iA6B RX bundle,,1,$0.00,RC control — 6 channels iBus receiver included
+Flight Control Subtotal,,,,,~$298
+Compute / Payload,Raspberry Pi Zero 2W,https://www.microcenter.com/product/683270/raspberry-pi-raspberry-pi-zero-w-2-with-headers,1,$17.99,Companion computer — MAVLink listener distance trigger camera capture geotagging
+Compute / Payload,Raspberry Pi Camera v2 NoIR 8MP,https://www.digikey.com/en/products/detail/raspberry-pi/SC0024/6152811,1,$15.00,NIR-capable sensor for NDVI — IR-cut filter removed
+Compute / Payload,22-pin → 15-pin CSI ribbon cable 15cm,,1,$0.00,Required adapter for Pi Zero 2W 22-pin CSI port
+Compute / Payload,680nm bandpass filter 12mm round,,1,$0.00,Blocks visible blue/green transmits red + NIR for NDVI channel separation
+Compute / Payload,Single-axis passive gimbal (custom),,1,$0.00,Self-designed pendulum camera stabilizer — period calculated to avoid pitch resonance
+Compute / Payload,32GB microSD card Class 10 A1,,1,$0.00,Pi OS and survey image storage
+Compute / Payload Subtotal,,,,,~$55
+Hardware & Consumables,Anti-vibration FC damper grommets,,1 pk,$0.00,Isolate FC IMU from motor vibration
+Hardware & Consumables,Blue Loctite 243 threadlocker,,1,$0.00,Motor mount bolts and prop adapters
+Hardware & Consumables,Zip ties 2.5mm × 100,,1 pk,$0.00,Wire management inside hub
+Hardware & Consumables,Kapton tape (polyimide),,1 roll,$0.00,Insulate FC and ESC contacts
+Hardware & Consumables,Solder,https://tinyurl.com/3x5hzd6u,1 roll,$2.55,Join electrical connections
+Hardware & Consumables,Desolder braid,https://tinyurl.com/2yraufwr,1 roll,$1.99,Remove solder for rework
+Hardware & Consumables Subtotal,,,,,~$13
+,,,,,,
+Cost Summary,,,,,
+Frame,,,,,~$99
+Propulsion,,,,,~$55
+Power,,,,,~$65
+Flight Control,,,,,~$298
+Compute / Payload,,,,,~$55
+Hardware & Consumables,,,,,~$13
+Grand Total,,,,,$192.02,
