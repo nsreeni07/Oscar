@@ -5,12 +5,10 @@ description: "An 850mm quadcopter designed for autonomous NDVI agricultural mapp
 created_at: "2026-04-05"
 ---
 
-# April 5: Project Research and Initial BOM
+# April 5: Project Research and Initial BOMStarted my project by reviewing my UAV idea and finding gaps in the plan.
 
-Started the project by going back through my original UAV concept and identifying gaps in the plan. The Pixhawk I had originally spec'd was going to eat most of the budget alone, and I hadn't thought through the power system properly. I spent time researching F4 vs F7 vs H7 flight controllers across RCGroups threads and build logs. the main tradeoffs were processing power, cost, and INAV compatibility. INAV support was non-negotiable since I need waypoint navigation for autonomous mapping passes. I narrowed down to F4/F405-based options and compared UART count, barometer integration, and current sensing.
-On the power side, I settled on a 4S LiPo — standard for this motor class, good balance of voltage and capacity without jumping to heavier 6S territory. I also looked into wire gauge requirements for the high-current runs between battery, ESC, and motors. Found ampacity reference tables and confirmed I need at least 14AWG for the main power leads undersized wire can overheat and cause a fire mid-flight, so this is a real safety consideration I hadn't fully mapped out before.
-Started the BOM in a spreadsheet pulling prices from AliExpress. It's not final GPS, frame, and camera payload are all still TBD. but having the skeleton in place lets me track running cost and see where the budget is going.
-
+The Pixhawk I had chosen would have cost most of my budget. I hadn't thought about the power system properly.I spent time looking into F4, F7 and H7 flight controllers on RCGroups and build logs.The main things to consider were processing power, cost and compatibility with INAV.INAV support was a must-have since I need to navigate through waypoints for mapping.I chse between F4 and F405 options. Compared how many UARTs they had, barometer integration and current sensing.
+For the power system I decided on a LiPo battery.It's standard for this type of motor. Provides a good balance of voltage and capacity.I also checked the wire gauge requirements for the current connections between the battery, ESC and motors.I found some reference tables. Confirmed that I need at least 14AWG wire for the main power leads.If the wire is too small it can. Cause a fire during flight so this is a real safety concern.I started a list of parts in a spreadsheet. Pulled prices from AliExpress.It's not final yet. I still need to decide on a GPS, frame and camera.Having the list in place helps me track the cost and see where my budget is going.The Pixhawk and power system are parts of the cost and INAV compatibility is crucial, for my project I'm using F4-based options and a 4S LiPo battery to balance cost and performance.
 ![Initial BOM Draft](https://github.com/user-attachments/assets/d4b93ad4-46d0-4e08-bc00-0bdf3df08ad6)
 
 **Total time spent: 2 hours**
