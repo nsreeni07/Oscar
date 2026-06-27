@@ -14,9 +14,7 @@ BOM Link:https://docs.google.com/spreadsheets/d/1ItluG4JZ7m0poAZtw0F7x5zs6U-Jy8w
 
 
 # Project OSCAR — Bill of Materials
-
-> Custom 850mm endurance agricultural mapping quadcopter
-|                                 |FIELD2                                             |FIELD3|FIELD4        |FIELD5        |FIELD6                                               |FIELD7                                                                           |
+|OSCAR — Updated Bill of Materials|FIELD2                                             |FIELD3|FIELD4        |FIELD5        |FIELD6                                               |FIELD7                                                                           |
 |---------------------------------|---------------------------------------------------|------|--------------|--------------|-----------------------------------------------------|---------------------------------------------------------------------------------|
 |                                 |                                                   |      |              |              |                                                     |                                                                                 |
 |Category                         |Item                                               |Qty   |Unit Price ($)|Line Total ($)|Notes                                                |Link                                                                             |
@@ -27,3 +25,4 @@ BOM Link:https://docs.google.com/spreadsheets/d/1ItluG4JZ7m0poAZtw0F7x5zs6U-Jy8w
 |Power Protection                 |50V 2200µF Low-ESR Electrolytic Capacitor          |1     |$3.00         |$3.00         |Across ESC battery pads — 6S voltage spike protection|https://tinyurl.com/yksjk3cu                                                     |
 |Logistics                        |Shipping                                           |1     |$35.00        |$35.00        |Combined shipping across vendors                     |                                                                                 |
 |                                 |                                                   |      |Total         |$146.31       |                                                     |                                                                                 |
+
