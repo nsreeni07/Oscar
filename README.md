@@ -2,7 +2,7 @@
 Autonomous UAV system that performs precision crop monitoring through systematic aerial imaging and vegetation index mapping across agricultural fields. The drone executes pre-programmed waypoint missions via INAV autopilot, with an onboard Raspberry Pi Zero 2W capturing geotagged near-infrared imagery using a NoIR camera and 680nm bandpass filter at each waypoint. After the mission is completed, images are transferred to a ground station running WebODM, which stitches frames into orthomosaic maps and calculated NDVI values to produce color-coded field health maps showing crop health, irrigation stress, and potential disease pressure. 
 
 Onshape Link:https://cad.onshape.com/documents/19523291b70a9c787e4fbec5/w/8af018b0ace6f9250dc6f3df/e/06f56f02d452d38e7c73aa30?renderMode=0&uiState=6a4018b7d9e7363edd5feb0e
-
+BOM Link:https://docs.google.com/spreadsheets/d/1ItluG4JZ7m0poAZtw0F7x5zs6U-Jy8w3EoTn_GnxS2I/edit?usp=sharing
 <img width="960" height="786" alt="Screenshot 2026-05-12 180331" src="https://github.com/user-attachments/assets/5cb71a60-cdf0-4a29-b372-2b2cad4f5c3e" />
 
 <img width="1345" height="641" alt="Screenshot 2026-05-06 182000" src="https://github.com/user-attachments/assets/735606a8-7236-477b-a397-c1ffcca2f356" />
