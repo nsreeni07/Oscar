@@ -1,0 +1,10 @@
+OSCAR — Updated Bill of Materials,,,,,,
+,,,,,,
+Category,Item,Qty,Unit Price ($),Line Total ($),Notes,Link
+Flight Controller / ESC,SpeedyBee F405 V4 BLS 60A 30x30 FC + 60A 4-in-1 ESC,1,$70.31,$70.31,"FC + ESC stack, replaces F722 + separate PDB/PM06",https://tinyurl.com/2nz8ucyx
+Companion Computer,Raspberry Pi Zero 2W,1,$20.00,$20.00,Runs NDVI pipeline + MAVLink telemetry,https://www.adafruit.com/piz2w?src=raspberrypi
+Camera,Pi Camera v2 NoIR,1,$15.00,$15.00,Paired with 680nm bandpass filter for NDVI,https://www.pishop.us/product/raspberry-pi-noir-camera-module-v2/?src=raspberrypi
+Power,XT90 Male-Female Pairs,1,$3.00,$3.00,Battery-to-frame power connectors,https://tinyurl.com/m3hn7ykb
+Power Protection,50V 2200µF Low-ESR Electrolytic Capacitor,1,$3.00,$3.00,Across ESC battery pads — 6S voltage spike protection,https://tinyurl.com/yksjk3cu
+Logistics,Shipping,1,$35.00,$35.00,Combined shipping across vendors,
+,,,Total,$146.31,,
