@@ -4,7 +4,8 @@ Autonomous UAV system for precision agricultural crop monitoring
 
 OSCAR is a custom-built 850mm quadcopter designed to fly automated survey missions over farmland and produce NDVI (Normalized Difference Vegetation Index) health maps of crops. It flies pre-programmed waypoint missions on INAV, captures geotagged near-infrared imagery at each waypoint using a modified Raspberry Pi camera, and hands that imagery off to a ground station for orthomosaic stitching and vegetation analysis. The end result is a color-coded map of a field showing where crops are healthy, where they're under irrigation stress, and where disease pressure might be building, all without a human piloting the aircraft or walking the field.
 
-Onshape CAD: https://cad.onshape.com/documents/19523291b70a9c787e4fbec5/w/8af018b0ace6f9250dc6f3df/e/06f56f02d452d38e7c73aa30 Full BOM: https://docs.google.com/spreadsheets/d/1ItluG4JZ7m0poAZtw0F7x5zs6U-Jy8w3EoTn_GnxS2I
+Onshape CAD: https://cad.onshape.com/documents/19523291b70a9c787e4fbec5/w/8af018b0ace6f9250dc6f3df/e/06f56f02d452d38e7c73aa30 
+Full BOM: https://docs.google.com/spreadsheets/d/1ItluG4JZ7m0poAZtw0F7x5zs6U-Jy8w3EoTn_GnxS2I
 
 How it works
 
