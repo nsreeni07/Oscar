@@ -59,9 +59,7 @@ I have finished drawing up the wiring diagram which demonstrates connections bet
 
 # April 11: MAVLink Integration and Camera Mount CAD
 
-I continued working on the MAVLink communication code in VS Code. At this point, the communication layer can detect heartbeats with timeout protection so the Raspberry Pi doesn't get stuck waiting if the flight controller is powered off. It also continuously reads GLOBAL_POSITION_INT messages to get the drone's latitude, longitude, and altitude, monitors battery voltage using SYS_STATUS messages, and logs raw MAVLink messages for debugging. I also wrote down the full hardware setup process as a checklist, including enabling UART, setting the baud rate to 115200, and configuring pymavlink to use /dev/ttyAMA0. Having everything documented now should save time when I start integrating the hardware later.
-
-I also finished the camera mount CAD model in Onshape. The final design is a two-piece enclosure with a base plate that bolts directly to the bottom of the drone frame and a top cover that securely holds the Raspberry Pi Zero 2W and NoIR camera module in place. I added integrated M3 standoffs for mounting the PCB, and the camera opening includes a small retaining lip to hold the 680 nm bandpass filter above the lens. The entire assembly attaches to the frame using four M3 bolts with vibration-damping foam grommets. It's a much cheaper alternative to a stabilized gimbal and should work well for the slow, steady flight paths OSCAR will use during agricultural mapping.
+The next step in my MAVLink communication system within VS Code was to add the ability to detect heartbeats along with a timeout mechanism, read GPS information constantly from `GLOBAL_POSITION_INT`, read battery voltage from `SYS_STATUS`, and log raw messages for troubleshooting purposes. In addition, I created documentation for the whole hardware set-up, including UART configuration, baud rate setting at 115200, and `pymavlink` connection parameters. Furthermore, I finished the design for the Onshape CAD model for the camera mount, which includes a two-piece housing that features M3 stand-offs for mounting, 680 nm filter retaining lips, and vibration damping foam mounts. The fixed mount is a cheaper solution than the gimbal but sufficient enough for slow agricultural mapping flights by OSCAR.
 
 
 ![Camera Mount CAD](https://github.com/user-attachments/assets/c3a6ab61-be63-43b8-b35f-f9648f0ea21a)
@@ -72,11 +70,7 @@ I also finished the camera mount CAD model in Onshape. The final design is a two
 
 # April 13: Project Feedback and Redesign
 
-I received some important feedback today that made me rethink the direction of the project. The main concern was that the engineering challenge wasn't as strong as it could be since most of the work involved selecting and assembling commercially available parts rather than designing original components.
-
-After thinking about it, I agreed with the feedback and decided to redesign the project while keeping the main goal the same. OSCAR will still be an autonomous drone for NDVI agricultural mapping, but I'll be doing much more of the engineering myself. Instead of buying a pre-made frame, I'm going to design a custom 850 mm carbon fiber frame from scratch. I'm also considering designing a custom flight computer in the future if time allows, while continuing to look for ways to reduce the overall cost of the build.
-
-I also reran my thrust calculations to make sure my motor and propeller combination can safely lift the fully assembled drone. I compared the expected thrust against the estimated all-up weight, including the frame, motors, flight controller stack, battery, imaging payload, and all of the hardware. I used a minimum thrust-to-weight ratio of 2:1, while aiming for closer to 3:1 to provide enough performance and stability for reliable flight.
+From the feedback I got, the project should be made to have a more engineering approach since most of the work in the original design had been based on buying and assembling commercially available parts. Having considered the comments, I have resolved to modify my design of OSCAR such that the target will still remain autonomous NDVI agricultural mapping. In the revised design, there will be need to design an 850 mm carbon fiber drone chassis from scratch and maybe develop a custom flight controller at some point in the future. The design of the propulsion system will entail recomputation of the thrust to weight ratio for the full drone weight, which will include chassis, motors, electronics, batteries, and the imaging payload.
 
 [Updated Project Doc](https://docs.google.com/document/d/19ZpP3lER7y1khA4oXiPfYRFo_DdoW_JR/edit)
 
@@ -88,11 +82,8 @@ I also reran my thrust calculations to make sure my motor and propeller combinat
 
 # April 20: Custom Frame Design and Sponsorship Outreach
 
-I started designing the custom 850 mm drone frame today. Before creating any CAD models, I spent some time studying existing 800 to 900 mm quadcopter frames to understand common design practices, including motor-to-motor spacing, plate thickness, and different ways of attaching the arms. I noticed that most commercial frames use a clamped arm design where the arms slide between two center plates and are secured with bolts. This makes damaged arms easy to replace without rebuilding the entire frame.
+I began designing the custom 850 mm drone frame by researching existing large quadcopter designs to understand common structural approaches, including motor spacing, plate thickness, and replaceable arm configurations. Based on this research, I started modeling the bottom plate in Onshape with a 30 × 30 mm M3 mounting pattern for the F722 flight controller and integrated battery strap slots. Progress has been slower due to limited time during exams, but I have continued making steady improvements. I also reevaluated the project budget and created a funding plan involving $100 of personal contribution, approximately $200 from Stasis funding, and another $200 through external sponsors. To support this, I began compiling a list of potential sponsors and drafting outreach emails to companies in the drone and precision agriculture industries.
 
-After doing that research, I began modeling the bottom plate in Onshape. I positioned the mounting holes to match the F722 flight controller's standard 30 × 30 mm M3 mounting pattern and added slots for the battery straps. Progress has been a little slower than I expected since exams have limited me to working in short 30-minute sessions, but I'm still making steady progress whenever I have time.
-
-I also took another look at my project budget and realized the total cost will be much higher than I can afford on my own. Right now, my plan is to contribute about $100 myself, apply for around $200 in funding from Stasis, and try to raise another $200 through outside sponsors. To get started, I created a list of potential sponsors and began drafting outreach emails to companies in the drone and precision agriculture industries.
 
 ![Frame Bottom Plate CAD](https://github.com/user-attachments/assets/139ad086-0a11-44e1-8b2a-872981db6df5)
 
@@ -102,10 +93,7 @@ I also took another look at my project budget and realized the total cost will b
 
 # April 26: CAD Model Revamp and Updated Dossier
 
-I spent some time today cleaning up my Onshape assembly because the older versions had parts spread across multiple files, and everything felt kind of disconnected. My main goal was to make sure the assembly itself was organized and that the mate relationships between the plates, arms, and other components all worked correctly. I still need to bring the motor mount over from a different file and merge it into the main assembly, but other than that, the overall geometry is pretty much where I want it to be.
-
-Right now, the frame uses a 4 mm bottom plate, which is a little thicker than normal since I'm using 3D-printed PETG instead of stronger carbon fiber. It also has a 3 mm top plate and 15 × 15 mm square arm tubes. The motor mounts are 3D-printed PETG brackets with heat-set M3 inserts, so when the motors are bolted on, the screws thread into metal instead of plastic, which makes the mounting much more durable.
-
+My primary concern was to make the organization of my Onshape assembly by bringing together all the previous files, which had been separated and also correcting all the mates of the plates, arms, and all other components. The basic geometry of the whole frame is almost done except for the motor mount, which I need to bring in from another file. In my current design, I have used a 4 mm bottom plate, a 3 mm top plate, and 15 × 15 mm square arm tubes. As I am going to use 3D printed PETG in place of carbon fiber in my prototype, I have made the plate thicker for extra support.
 
 ![Full CAD Model](https://github.com/user-attachments/assets/28d806ec-79f9-47fb-9391-9f5ed72f6bb4)
 
@@ -115,10 +103,7 @@ Right now, the frame uses a 4 mm bottom plate, which is a little thicker than no
 
 # May 5: Final CAD and Budget Finalized
 
-Today I finished the full CAD model by adding the motor mounts and doing a final assembly check. I made sure the motor bolt patterns lined up with the mounts, the FC stack had enough clearance under the top plate, the camera mount had a clear downward view, the battery was centered over the center of gravity, and all of the wire routing paths were accessible. There are still a few areas where I'll have to rely on careful cable management to keep the wiring neat since the frame doesn't include dedicated wire channels. That's definitely something I'd like to improve in a future revision.
-
-The total cost of the project ended up being about $650. I'm paying around $550 myself and hoping Stasis can help cover the remaining $100. The biggest expenses were the motors, props, and ESC stack at about $80, the FC stack at $45, the battery at $40, the imaging payload at $35, the GPS at $12, the frame materials and hardware at around $60, 3D printing filament and fabrication at about $30, and another $20 for wire, connectors, and fasteners. The final cost was higher than I originally expected, mostly because the custom frame and the full imaging payload added more to the budget than I had planned.
-
+The model design is now complete and involves assembling the model and checking the fitment of all parts including the mounting of the motors. It is now verified that all the bolt arrangements in the motors fit well, the flight controller stack has enough space, the camera mount provides a clear view downwards, the battery position is close to the CG point and the wire routing is still possible. Although the design works well, there is room for future improvement through the provision of dedicated cable routing space inside the frame. The cost of this project is around $650 where most of the money will be spent on the motors, propellers, and ESC stack, flight controller stack, battery, imaging payload, GPS, frame, 3D printing and other miscellaneous hardware. The main reason for high cost is the special frame design and added components for the imaging payload.
 
 ![Final CAD Assembly](https://github.com/user-attachments/assets/45a92108-5968-4068-9fa5-442831c34047)
 
@@ -127,11 +112,7 @@ The total cost of the project ended up being about $650. I'm paying around $550 
 ---
 
 # May 7: CAD Fixes and Pitch Refresh
-
-Today I updated the motor mount design by changing the hole size for the heat-set inserts. The standard approach with PETG is to make the hole slightly undersized so the insert melts its way into the plastic under heat and pressure. As the plastic cools, it hardens around the knurled insert and creates a much stronger fit. Based on recommendations from the Prusa forums, I'm using about a 0.15 mm undersized hole. That means changing the hole diameter to 4.85 mm instead of the 5.0 mm version I had before, which would have been too loose and wouldn't have held the inserts as securely.
-
-I also spent some time revising my project pitch. I tightened up the overall wording and made the main problem statement more focused by emphasizing the price gap between professional NDVI drones and what a small farm or a high school student can realistically afford. I think the revised version does a better job of explaining why this project matters.
-
+In today's session, I worked on designing the motor mounts where I modified the size of heat set insert holes to allow for a better fit into PETG material. To do this, I reduced the hole size from 5.0 mm to 4.85 mm which is 0.15 mm undersized. This allows the heat set insert to embed itself into the plastic when it melts. In addition to this, I also worked on modifying my project pitch to make the problem more apparent. In particular, I worked on the cost aspect of having professional NDVI mapping drones for small farms and students.
 
 ![CAD Holes Update](https://github.com/user-attachments/assets/fb9de81c-1055-4581-8474-67c4b4913022)
 
@@ -140,10 +121,7 @@ I also spent some time revising my project pitch. I tightened up the overall wor
 ---
 
 # June 6: Flight Controller Switch and Capacitor
-
-Today I finalized my decision to switch from the F722 flight controller to the SpeedyBee F405 V4 stack, which includes both the flight controller and a 4-in-1 60A BLS ESC. I decided to go with this setup because it's more affordable than buying an F722 and a separate ESC. Another advantage is that the flight controller and ESC connect internally, so there isn't any soldering required between them. The stack also has built-in current sensing, which means I no longer need the PM06 V2 power module. On top of that, it's fully compatible with my existing FlySky i6 transmitter and FS-iA6B receiver using the iBUS protocol, so I don't have to spend money on a new radio system. The ESC is rated for 60A per motor, which gives me plenty of headroom since my motors are only expected to draw about 25 to 30A at full throttle.
-
-I also added a 50V 2200 µF low-ESR electrolytic capacitor to the bill of materials. When the motors speed up or slow down quickly, they can create voltage spikes on the power rail because of the sudden change in current. Without a capacitor to absorb those spikes, the voltage could exceed what the ESC can safely handle, potentially causing brownouts or even permanent damage. The capacitor will be mounted as close as possible to the ESC power input so it can do its job effectively. I chose a Panasonic FR or FC series capacitor because their low ESR makes them much better at reducing high-frequency voltage spikes than standard capacitors. The 50V rating also provides plenty of safety margin above the maximum voltage of my 4S battery, which is about 16.8V.
+Nowadays, I have successfully replaced the F722 flight controller with the SpeedyBee F405 V4 stack, which consists of the flight controller and 60A 4-in-1 BLS ESC in one more compact and less expensive package. It lowers costs, gets rid of soldering needed between the FC and ESC, and makes it possible to forget about purchasing the Power Module 06 V2 because of the current measurement implemented in the stack. The stack still works with my old FlySky i6 transmitter and FS-iA6B receiver via iBUS, and the 60A ESC is quite enough for my motors, which are estimated to consume 25-30A at full throttle. Moreover, I decided to add a 50V 2200 µF low-ESR electrolytic capacitor to the system in order to save the power system from any possible voltage spikes related to the fast change of the current used by the motors.
 
 ![Speedybee F405 V4](https://github.com/user-attachments/assets/69a6a3ad-3552-4748-913d-b0f2b7915441)
 
