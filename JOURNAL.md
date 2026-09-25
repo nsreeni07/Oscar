@@ -8,37 +8,117 @@ created_at: "2026-04-05"
 
 # September 25: Thrust Calculations 
 
-These are some thrust calculations I did 
-Mass Budget
-Component	Mass
-Frame (CF tubes, plates, hardware)	380 g
-Motors × 4 (4114 320KV, ~120 g each)	480 g
-Props × 4 (17-in CF, ~25 g each)	100 g
-SpeedyBee F405 V4 stack	65 g
-6S 5000 mAh LiPo	780 g
-M8N GPS + compass	28 g
-SiK 915 MHz telemetry (air unit)	25 g
-FlySky FS-iA6B receiver	16 g
-Raspberry Pi Zero 2W	23 g
-Pi Camera v2 NoIR + 680 nm filter	12 g
-Passive gimbal assembly	55 g
-Wiring harness + connectors	60 g
-Misc hardware (standoffs, screws)	40 g
-Subtotal	2,064 g
-+ 5% build tolerance	2,167 g
-AUW	2.17 kg (4.78 lb)
-Thrust Analysis
-Parameter	Value
-Motor	Tarot 4114 320KV
-Prop	17-in carbon fiber
-Battery	6S · 22.2 V nominal · 25.2 V full
-No-load max RPM (22 V)	~7,100 RPM
-Max thrust per motor	2,050 g (20.1 N)
-Max thrust total (4×)	8,200 g (80.4 N)
-Thrust-to-weight ratio	3.78 : 1
-Hover thrust required per motor	~542 g
-Hover throttle (estimated)	~51%
 
+## Mass Budget
+
+| Component | Mass |
+|---|---|
+| Frame (CF tubes, plates, hardware) | 380 g |
+| Motors × 4 (4114 320KV, ~120 g each) | 480 g |
+| Props × 4 (17-in CF, ~25 g each) | 100 g |
+| SpeedyBee F405 V4 stack | 65 g |
+| 6S 5000 mAh LiPo | 780 g |
+| M8N GPS + compass | 28 g |
+| SiK 915 MHz telemetry (air unit) | 25 g |
+| FlySky FS-iA6B receiver | 16 g |
+| Raspberry Pi Zero 2W | 23 g |
+| Pi Camera v2 NoIR + 680 nm filter | 12 g |
+| Passive gimbal assembly | 55 g |
+| Wiring harness + connectors | 60 g |
+| Misc hardware (standoffs, screws) | 40 g |
+| **Subtotal** | **2,064 g** |
+| **+ 5% build tolerance** | **2,167 g** |
+
+
+---
+
+## Thrust Analysis
+
+| Parameter | Value |
+|---|---|
+| Motor | Tarot 4114 320KV |
+| Prop | 17-in carbon fiber |
+| Battery | 6S · 22.2 V nominal · 25.2 V full |
+| No-load max RPM (22 V) | ~7,100 RPM |
+| Max thrust per motor | 2,050 g (20.1 N) |
+| Max thrust total (4×) | 8,200 g (80.4 N) |
+| **Thrust-to-weight ratio** | **3.78 : 1** |
+| Hover thrust required per motor | ~542 g |
+| Hover throttle (estimated) | ~51% |
+
+
+
+---
+
+## Flight Time
+
+| Scenario | Time |
+|---|---|
+| Theoretical (pure hover, 80% capacity) | 23.8 min |
+| Real-world (87% efficiency factor) | 20.7 min |
+| Conservative mission (15% reserve) | **17.6 min** |
+
+The 87% real-world factor covers ESC switching losses, wiring resistance, FC draw (~2 W), Pi Zero draw (~2.5 W continuous during imaging), wind perturbations, and maneuvering. The 15% reserve is a hard floor — INAV RTH triggers before OSCAR ever touches it.
+
+> **Practical target: 17–20 minutes of effective survey time per flight.** That's roughly 3× the endurance of an F450-class build carrying the same payload.
+
+One correction from the original design doc: earlier estimates put flight time at 25–35 minutes. That figure didn't fully account for Pi + camera power draw or the efficiency derating. 17–20 minutes is the honest number.
+
+---
+
+## Aerodynamic Figures
+
+| Parameter | Value |
+|---|---|
+| Prop disc area (each) | 0.1464 m² |
+| Total disc area (4×) | 0.5858 m² |
+| **Disc loading** | **36.3 N/m² (0.758 lb/ft²)** |
+| Hover induced velocity | 3.85 m/s |
+| Hover RPM (estimated) | ~3,650 RPM |
+| Prop tip speed | 82.6 m/s (185 mph) |
+| Tip Mach number | **0.241 — well subsonic ✓** |
+
+Low disc loading is the core efficiency driver. By using 17-in props on an 850 mm frame, OSCAR moves a large air mass slowly rather than a small air mass fast — that's fundamentally how you get endurance from a quadrotor. Tip speed at Mach 0.241 means no compressibility effects, so prop efficiency stays high across the throttle range.
+
+---
+
+## Survey Coverage
+
+| Parameter | Value |
+|---|---|
+| Survey altitude | 30 m AGL |
+| Camera FOV (horizontal) | 62.2° |
+| Ground swath width | 36.2 m |
+| Photo trigger interval | 5 m (Haversine distance) |
+| Nominal survey speed | 5 m/s (11.2 mph) |
+| Photos per km of flight | 200 |
+| Along-track overlap | ~86% |
+| **Estimated coverage per flight** | **~19 ha (47 acres)** |
+
+86% along-track overlap is intentionally high for NDVI work — typical minimum is 70–75%, but the Pi Camera v2 isn't high resolution enough to rely on sparse coverage. Dense overlap also significantly improves the WebODM orthomosaic output. At 47 acres per flight this is more than sufficient for the small-to-mid farm use case OSCAR is targeting.
+
+---
+
+## Notes & Assumptions
+
+- Motor max thrust (2,050 g/motor at 6S + 17-in) is extrapolated from published test data for 4114-class motors. Will be confirmed on a thrust stand before maiden.
+- Prop pitch assumed 5.8-in based on typical pairing for 17-in slow-fly props. Actual efficiency may vary ±5%.
+- Pi Zero 2W draw modeled at 2.5 W continuous during imaging. Will measure with a USB power meter before final integration.
+- Flight times assume 22.2 V nominal. Voltage sag on a 5 Ah pack at 10 A draw is small but present.
+- Survey coverage assumes a clean lawnmower pattern. Turn overhead time is not included.
+
+---
+
+## To-Do Before Maiden
+
+- [ ] Thrust stand test — confirm 2,050 g/motor
+- [ ] Measure Pi Zero power draw under imaging load
+- [ ] Hover test — log actual current vs modeled 10.1 A
+- [ ] Update this entry with real numbers
+
+---
+
+*Will update with flight-test data post-maiden.*
 
 
 **Total time spent: 1 hours**
