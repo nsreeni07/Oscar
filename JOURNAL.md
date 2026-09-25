@@ -3,6 +3,46 @@ title: "OSCAR - Autonomous NDVI Agricultural Mapping Drone"
 author: "nsreeni07"
 description: "An 850mm quadcopter designed for autonomous NDVI agricultural mapping using a Raspberry Pi Zero 2W imaging payload and custom carbon fiber frame."
 created_at: "2026-04-05"
+
+---
+
+# September 25: Thrust Calculations 
+
+These are some thrust calculations I did 
+Mass Budget
+Component	Mass
+Frame (CF tubes, plates, hardware)	380 g
+Motors × 4 (4114 320KV, ~120 g each)	480 g
+Props × 4 (17-in CF, ~25 g each)	100 g
+SpeedyBee F405 V4 stack	65 g
+6S 5000 mAh LiPo	780 g
+M8N GPS + compass	28 g
+SiK 915 MHz telemetry (air unit)	25 g
+FlySky FS-iA6B receiver	16 g
+Raspberry Pi Zero 2W	23 g
+Pi Camera v2 NoIR + 680 nm filter	12 g
+Passive gimbal assembly	55 g
+Wiring harness + connectors	60 g
+Misc hardware (standoffs, screws)	40 g
+Subtotal	2,064 g
++ 5% build tolerance	2,167 g
+AUW	2.17 kg (4.78 lb)
+Thrust Analysis
+Parameter	Value
+Motor	Tarot 4114 320KV
+Prop	17-in carbon fiber
+Battery	6S · 22.2 V nominal · 25.2 V full
+No-load max RPM (22 V)	~7,100 RPM
+Max thrust per motor	2,050 g (20.1 N)
+Max thrust total (4×)	8,200 g (80.4 N)
+Thrust-to-weight ratio	3.78 : 1
+Hover thrust required per motor	~542 g
+Hover throttle (estimated)	~51%
+
+
+
+**Total time spent: 1 hours**
+
 ---
 
 # April 5: Project Research and Initial BOM
