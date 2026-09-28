@@ -45,6 +45,7 @@ created_at: "2026-04-05"
 | **Thrust-to-weight ratio** | **3.78 : 1** |
 | Hover thrust required per motor | ~542 g |
 | Hover throttle (estimated) | ~51% |
+<img width="1625" height="795" alt="Screenshot 2026-05-05 223018" src="https://github.com/user-attachments/assets/1de1d756-aa4b-4cec-8aab-a1e63569ee56" />
 
 
 **Total time spent: 2 hours**
